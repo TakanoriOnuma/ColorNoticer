@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.ImageFormat;
@@ -11,15 +13,18 @@ import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class ConfigColorFilterActivity extends Activity
-        implements SurfaceHolder.Callback, Camera.PreviewCallback {
+        implements SurfaceHolder.Callback, Camera.PreviewCallback, View.OnClickListener {
 
     private SurfaceView mSvFacePreview;
     private SurfaceHolder mSurfaceHolder;
@@ -32,6 +37,11 @@ public class ConfigColorFilterActivity extends Activity
     private Bitmap mBitmap;
     private OverLayView mOverLay;
 
+    private SeekBar mAlphaColorBar;
+    private SeekBar mRedColorBar;
+    private SeekBar mGreenColorBar;
+    private SeekBar mBlueColorBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +51,25 @@ public class ConfigColorFilterActivity extends Activity
         mSvFacePreview = (SurfaceView)findViewById(R.id.FacePreview);
         mSurfaceHolder = mSvFacePreview.getHolder();
         mSurfaceHolder.addCallback(this);
+
+        mAlphaColorBar = (SeekBar)findViewById(R.id.AlphaColorBar);
+        mRedColorBar   = (SeekBar)findViewById(R.id.RedColorBar);
+        mGreenColorBar = (SeekBar)findViewById(R.id.GreenColorBar);
+        mBlueColorBar  = (SeekBar)findViewById(R.id.BlueColorBar);
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        int alpha = pref.getInt("alphaColor", 0);
+        int red   = pref.getInt("redColor", 0);
+        int green = pref.getInt("greenColor", 0);
+        int blue  = pref.getInt("blueColor", 0);
+
+        mAlphaColorBar.setProgress(alpha);
+        mRedColorBar.setProgress(red);
+        mGreenColorBar.setProgress(green);
+        mBlueColorBar.setProgress(blue);
+
+        Button saveButton = (Button)findViewById(R.id.SaveButton);
+        saveButton.setOnClickListener(this);
 
         mOverLay = (OverLayView)findViewById(R.id.OverLayView);
     }
@@ -87,15 +116,11 @@ public class ConfigColorFilterActivity extends Activity
             // byte[]をint[]に変換
             int[] frame = mImageData;
 
-            SeekBar alphaColorBar = (SeekBar)findViewById(R.id.AlphaColorBar);
-            SeekBar redColorBar   = (SeekBar)findViewById(R.id.RedColorBar);
-            SeekBar greenColorBar = (SeekBar)findViewById(R.id.GreenColorBar);
-            SeekBar blueColorBar  = (SeekBar)findViewById(R.id.BlueColorBar);
             TextView colorProperties = (TextView)findViewById(R.id.ColorProperties);
-            int alpha = alphaColorBar.getProgress() & 0xff;
-            int red   = redColorBar.getProgress()   & 0xff;
-            int green = greenColorBar.getProgress() & 0xff;
-            int blue  = blueColorBar.getProgress()  & 0xff;
+            int alpha = mAlphaColorBar.getProgress() & 0xff;
+            int red   = mRedColorBar.getProgress()   & 0xff;
+            int green = mGreenColorBar.getProgress() & 0xff;
+            int blue  = mBlueColorBar.getProgress()  & 0xff;
             colorProperties.setText(String.format("%d, %d, %d, %d", alpha, red, green, blue));
 
             ColorFilter.colorFilter(frame, alpha, red, green, blue);
@@ -190,5 +215,26 @@ public class ConfigColorFilterActivity extends Activity
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        // 設定を保存して終了する
+        int alpha = mAlphaColorBar.getProgress();
+        int red   = mRedColorBar.getProgress();
+        int green = mGreenColorBar.getProgress();
+        int blue  = mBlueColorBar.getProgress();
+
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        Editor editor = pref.edit();
+
+        editor.putInt("alphaColor", alpha);
+        editor.putInt("redColor", red);
+        editor.putInt("greenColor", green);
+        editor.putInt("blueColor", blue);
+        editor.commit();
+
+        surfaceDestroyed(mSurfaceHolder);
+        finish();
     }
 }

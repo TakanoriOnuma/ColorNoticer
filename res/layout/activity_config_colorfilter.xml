@@ -57,6 +57,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="" />
+
+            <Button
+                android:id="@+id/SaveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="保存" />
         </LinearLayout>
     </FrameLayout>
 
