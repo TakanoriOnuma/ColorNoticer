@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity
     private List<Size> mSupportedPreviewSizes;
 
     private byte[] mFrameBuffer;
-    private int[]  mGrayResult;
+    private int[]  mImageData;
     private Bitmap mBitmap;
     private OverLayView mOverLay;
 
@@ -210,18 +210,16 @@ public class MainActivity extends ActionBarActivity
     public void onPreviewFrame(byte[] data, Camera camera) {
         if(mCamera != null) {
             // byte[]をint[]に変換（明度のみ）
-            int[] frame = mGrayResult;
+            int[] frame = mImageData;
 
-            for(int i = 0; i < frame.length; i++) {
-                int gray = data[i] & 0xff;
-                frame[i] = 0xff000000 | gray << 16 | gray << 8 | gray;
-            }
+            ColorTransfar.convertYUV420_NV21toRGB8888(frame, data, mPreviewSize.width, mPreviewSize.height);
 
             // Bitmapに描画して、OverLayに再描画を促す
             mBitmap.setPixels(frame, 0, mPreviewSize.width,
                     0, 0, mPreviewSize.width, mPreviewSize.height);
             mOverLay.invalidate();
 
+            // また映像を要求する
             mCamera.addCallbackBuffer(mFrameBuffer);
         }
     }
@@ -268,11 +266,11 @@ public class MainActivity extends ActionBarActivity
                 int size = mPreviewSize.width * mPreviewSize.height *
                         ImageFormat.getBitsPerPixel(params.getPreviewFormat()) / 8;
                 mFrameBuffer = new byte[size];
-                mGrayResult = new int[mPreviewSize.width * mPreviewSize.height];
+                mImageData = new int[mPreviewSize.width * mPreviewSize.height];
 
                 // 透明な画像をセットしておく
                 mBitmap = Bitmap.createBitmap(mPreviewSize.width, mPreviewSize.height, Config.ARGB_8888);
-                mBitmap.setPixels(mGrayResult, 0, mPreviewSize.width,
+                mBitmap.setPixels(mImageData, 0, mPreviewSize.width,
                         0, 0, mPreviewSize.width, mPreviewSize.height);
                 mOverLay.setBitmap(mBitmap);
 
