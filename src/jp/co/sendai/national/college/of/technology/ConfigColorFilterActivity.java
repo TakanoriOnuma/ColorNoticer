@@ -236,8 +236,6 @@ public class ConfigColorFilterActivity extends Activity
         editor.putInt("blueColor", blue);
         editor.commit();
 
-        Log.d(TAG, "alpha = " + alpha + ", " + mPref.getInt("alphaColor", 0));
-
         surfaceDestroyed(mSurfaceHolder);
         finish();
     }
