@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class ConfigColorFilterActivity extends Activity
         implements SurfaceHolder.Callback, Camera.PreviewCallback {
@@ -82,10 +84,21 @@ public class ConfigColorFilterActivity extends Activity
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         if(mCamera != null) {
-            // byte[]をint[]に変換（明度のみ）
+            // byte[]をint[]に変換
             int[] frame = mImageData;
 
-            ColorTransfar.convertYUV420_NV21toRGB8888(frame, data, mPreviewSize.width, mPreviewSize.height);
+            SeekBar alphaColorBar = (SeekBar)findViewById(R.id.AlphaColorBar);
+            SeekBar redColorBar   = (SeekBar)findViewById(R.id.RedColorBar);
+            SeekBar greenColorBar = (SeekBar)findViewById(R.id.GreenColorBar);
+            SeekBar blueColorBar  = (SeekBar)findViewById(R.id.BlueColorBar);
+            TextView colorProperties = (TextView)findViewById(R.id.ColorProperties);
+            int alpha = alphaColorBar.getProgress() & 0xff;
+            int red   = redColorBar.getProgress()   & 0xff;
+            int green = greenColorBar.getProgress() & 0xff;
+            int blue  = blueColorBar.getProgress()  & 0xff;
+            colorProperties.setText(String.format("%d, %d, %d, %d", alpha, red, green, blue));
+
+            ColorFilter.colorFilter(frame, alpha, red, green, blue);
 
             // Bitmapに描画して、OverLayに再描画を促す
             mBitmap.setPixels(frame, 0, mPreviewSize.width,

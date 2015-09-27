@@ -15,21 +15,37 @@
             android:orientation="vertical"
             android:gravity="top">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="透過率" />
             <SeekBar
                 android:id="@+id/AlphaColorBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:max="255" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="赤" />
             <SeekBar
                 android:id="@+id/RedColorBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:max="255" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="緑" />
             <SeekBar
                 android:id="@+id/GreenColorBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:max="255" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="青" />
             <SeekBar
                 android:id="@+id/BlueColorBar"
                 android:layout_width="fill_parent"
@@ -40,7 +56,7 @@
                 android:id="@+id/ColorProperties"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="test" />
+                android:text="" />
         </LinearLayout>
     </FrameLayout>
 
