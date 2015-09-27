@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:baselineAligned="false">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="彩度" />
+            <SeekBar
+                android:id="@+id/SaturationBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:max="255" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="色相開始" />
+            <SeekBar
+                android:id="@+id/HueStartBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:max="360" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="色相終了" />
+            <SeekBar
+                android:id="@+id/HueEndBar"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:max="360" />
+
+            <TextView
+                android:id="@+id/ColorProperties"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
+
+            <Button
+                android:id="@+id/SaveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="保存" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5">
+        <SurfaceView
+            android:id="@+id/FacePreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <jp.co.sendai.national.college.of.technology.OverLayView
+            android:id="@+id/OverLayView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+
+</LinearLayout>

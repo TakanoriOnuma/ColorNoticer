@@ -27,6 +27,10 @@
             android:label="@string/app_name"
             android:screenOrientation="landscape">
         </activity>
+        <activity android:name="jp.co.sendai.national.college.of.technology.ConfigColorInfoActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape">
+        </activity>
     </application>
 
 </manifest>
