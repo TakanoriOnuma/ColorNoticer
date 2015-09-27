@@ -8,8 +8,9 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class OverLayView extends View {
-    private Bitmap mBitmap = null;
+    private Bitmap mBitmap     = null;
     private Rect   mBitmapRect = null;
+    private Rect   mViewRect   = new Rect(0, 0, 0, 0);
 
     public OverLayView(Context context) {
         super(context);
@@ -17,6 +18,11 @@ public class OverLayView extends View {
 
     public OverLayView(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        mViewRect.set(0, 0, getWidth(), getHeight());
     }
 
     public void setBitmap(Bitmap bitmap) {
@@ -27,8 +33,7 @@ public class OverLayView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         if(mBitmap != null) {
-            Rect viewRect = new Rect(0, 0, canvas.getWidth(), canvas.getHeight());
-            canvas.drawBitmap(mBitmap, mBitmapRect, viewRect, null);
+            canvas.drawBitmap(mBitmap, mBitmapRect, mViewRect, null);
         }
     }
 }
