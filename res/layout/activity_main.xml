@@ -15,10 +15,14 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-	    <SurfaceView
-	        android:id="@+id/FacePreview"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent" />
+        <SurfaceView
+            android:id="@+id/FacePreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <jp.co.sendai.national.college.of.technology.OverLayView
+            android:id="@+id/OverLayView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </FrameLayout>
 
     <!--

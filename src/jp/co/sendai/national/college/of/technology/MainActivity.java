@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
@@ -44,6 +46,11 @@ public class MainActivity extends ActionBarActivity
     private Size mPreviewSize;
     private List<Size> mSupportedPreviewSizes;
 
+    private byte[] mFrameBuffer;
+    private int[]  mGrayResult;
+    private Bitmap mBitmap;
+    private OverLayView mOverLay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +69,8 @@ public class MainActivity extends ActionBarActivity
         mSvFacePreview = (SurfaceView)findViewById(R.id.FacePreview);
         mSurfaceHolder = mSvFacePreview.getHolder();
         mSurfaceHolder.addCallback(this);
+
+        mOverLay = (OverLayView)findViewById(R.id.OverLayView);
     }
 
     @Override
@@ -199,8 +208,22 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-        // TODO 自動生成されたメソッド・スタブ
+        if(mCamera != null) {
+            // byte[]をint[]に変換（明度のみ）
+            int[] frame = mGrayResult;
 
+            for(int i = 0; i < frame.length; i++) {
+                int gray = data[i] & 0xff;
+                frame[i] = 0xff000000 | gray << 16 | gray << 8 | gray;
+            }
+
+            // Bitmapに描画して、OverLayに再描画を促す
+            mBitmap.setPixels(frame, 0, mPreviewSize.width,
+                    0, 0, mPreviewSize.width, mPreviewSize.height);
+            mOverLay.invalidate();
+
+            mCamera.addCallbackBuffer(mFrameBuffer);
+        }
     }
 
     @Override
@@ -242,18 +265,20 @@ public class MainActivity extends ActionBarActivity
                 mCamera.setParameters(params);
 
                 // バッファの用意
-//                int size = mPreviewSize.width * mPreviewSize.height *
-//                        ImageFormat.getBitsPerPixel(params.getPreviewFormat()) / 8;
-//                mFrameBuffer = new byte[size];
-//                mGrayResult = new int[mPreviewSize.width * mPreviewSize.height];
-//
-//
-//                mBitmap = Bitmap.createBitmap(mPreviewSize.width, mPreviewSize.height, Config.ARGB_8888);
-//                mOverLay.setBitmap(mBitmap);
+                int size = mPreviewSize.width * mPreviewSize.height *
+                        ImageFormat.getBitsPerPixel(params.getPreviewFormat()) / 8;
+                mFrameBuffer = new byte[size];
+                mGrayResult = new int[mPreviewSize.width * mPreviewSize.height];
+
+                // 透明な画像をセットしておく
+                mBitmap = Bitmap.createBitmap(mPreviewSize.width, mPreviewSize.height, Config.ARGB_8888);
+                mBitmap.setPixels(mGrayResult, 0, mPreviewSize.width,
+                        0, 0, mPreviewSize.width, mPreviewSize.height);
+                mOverLay.setBitmap(mBitmap);
 
                 // フレームバッファを追加
                 mCamera.setPreviewCallbackWithBuffer(this);
-//                mCamera.addCallbackBuffer(mFrameBuffer);
+                mCamera.addCallbackBuffer(mFrameBuffer);
 
                 // プレビュー開始
                 mCamera.startPreview();
@@ -271,5 +296,4 @@ public class MainActivity extends ActionBarActivity
             mCamera = null;
         }
     }
-
 }
