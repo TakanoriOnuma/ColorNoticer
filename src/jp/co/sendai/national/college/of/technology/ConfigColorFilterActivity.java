@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 public class ConfigColorFilterActivity extends Activity
         implements SurfaceHolder.Callback, Camera.PreviewCallback, View.OnClickListener {
+    private static final String TAG = "ConfigColorFilterActivity";
 
     private SurfaceView mSvFacePreview;
     private SurfaceHolder mSurfaceHolder;
@@ -42,6 +43,8 @@ public class ConfigColorFilterActivity extends Activity
     private SeekBar mGreenColorBar;
     private SeekBar mBlueColorBar;
 
+    private SharedPreferences mPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,11 +60,11 @@ public class ConfigColorFilterActivity extends Activity
         mGreenColorBar = (SeekBar)findViewById(R.id.GreenColorBar);
         mBlueColorBar  = (SeekBar)findViewById(R.id.BlueColorBar);
 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        int alpha = pref.getInt("alphaColor", 0);
-        int red   = pref.getInt("redColor", 0);
-        int green = pref.getInt("greenColor", 0);
-        int blue  = pref.getInt("blueColor", 0);
+        mPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int alpha = mPref.getInt("alphaColor", 0);
+        int red   = mPref.getInt("redColor", 0);
+        int green = mPref.getInt("greenColor", 0);
+        int blue  = mPref.getInt("blueColor", 0);
 
         mAlphaColorBar.setProgress(alpha);
         mRedColorBar.setProgress(red);
@@ -225,14 +228,15 @@ public class ConfigColorFilterActivity extends Activity
         int green = mGreenColorBar.getProgress();
         int blue  = mBlueColorBar.getProgress();
 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        Editor editor = pref.edit();
+        Editor editor = mPref.edit();
 
         editor.putInt("alphaColor", alpha);
         editor.putInt("redColor", red);
         editor.putInt("greenColor", green);
         editor.putInt("blueColor", blue);
         editor.commit();
+
+        Log.d(TAG, "alpha = " + alpha + ", " + mPref.getInt("alphaColor", 0));
 
         surfaceDestroyed(mSurfaceHolder);
         finish();
