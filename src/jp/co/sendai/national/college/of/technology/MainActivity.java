@@ -223,7 +223,7 @@ public class MainActivity extends ActionBarActivity
             // byte[]をint[]に変換（明度のみ）
             int[] frame = mImageData;
 
-            ColorTransfar.convertYUV420_NV21toRGB8888(frame, data, mPreviewSize.width, mPreviewSize.height);
+            ColorTransfar.decodeYUV420SP(frame, data, mPreviewSize.width, mPreviewSize.height);
 
             // Bitmapに描画して、OverLayに再描画を促す
             mBitmap.setPixels(frame, 0, mPreviewSize.width,

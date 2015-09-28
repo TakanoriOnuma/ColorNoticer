@@ -44,15 +44,17 @@ public class ColorFilter {
         }
     }
 
+    // hueStartからhueEndの色相かを調べる
+    // ただし彩度についても考慮する
     private static boolean isMask(int y, int u, int v, int saturation, int hueStart, int hueEnd) {
-        float r = 1.402f * v;
-        float g = -0.344f * u - 0.714f * v;
-        float b = 1.772f * u;
+        float r = y + 1.402f * v;
+        float g = y + -0.344f * u - 0.714f * v;
+        float b = y + 1.772f * u;
 
         float max = max(r, g, b);
         float min = min(r, g, b);
 
-        float contrast = max - min;
+        float contrast = (max - min) / max * 255;
 
         // 差が小さいなら彩度Sも小さいので計算しない
         if(contrast <= saturation) {
