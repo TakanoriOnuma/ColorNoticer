@@ -15,14 +15,24 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <SurfaceView
-            android:id="@+id/FacePreview"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <jp.co.sendai.national.college.of.technology.OverLayView
-            android:id="@+id/OverLayView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+            <SurfaceView
+                android:id="@+id/FacePreview"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+            <jp.co.sendai.national.college.of.technology.OverLayView
+                android:id="@+id/OverLayView"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+        </LinearLayout>
+
     </FrameLayout>
 
     <!--
