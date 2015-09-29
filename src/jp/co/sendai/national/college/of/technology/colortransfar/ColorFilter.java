@@ -1,6 +1,30 @@
 package jp.co.sendai.national.college.of.technology.colortransfar;
 
-public class ColorFilter {
+public class ColorFilter implements IColorFilter {
+    private int mSaturation = 0;
+    private int mHueStart = -60;
+    private int mHueEnd = -60;
+
+    // コンストラクタ
+    public ColorFilter() {
+    }
+    public ColorFilter(int saturation, int hueStart, int hueEnd) {
+        mSaturation = saturation;
+        mHueStart   = hueStart;
+        mHueEnd     = hueEnd;
+    }
+
+    // セッター
+    public void setSaturation(int saturation) {
+        mSaturation = saturation;
+    }
+    public void setHueStart(int hueStart) {
+        mHueStart = hueStart;
+    }
+    public void setHueEnd(int hueEnd) {
+        mHueEnd = hueEnd;
+    }
+
     public static void colorFilter(int rgb[], int alpha, int red, int green, int blue) {
         alpha &= 0xff;
         red   &= 0xff;
@@ -11,47 +35,17 @@ public class ColorFilter {
         }
     }
 
-    public static void mask(int[] rgb, byte[] yuv420sp, int width, int height,
-            int saturation, int hueStart, int hueEnd) {
-        int frameSize = width * height;
-        for(int j = 0, yp = 0; j < height; j++) {
-            int u = 0;
-            int v = 0;
-            int uvp = frameSize + (j >> 1) * width;
-
-            for(int i = 0; i < width; i++, yp++) {
-                int y = (0xff & ((int)yuv420sp[yp])) - 16;
-                if(y < 0) {
-                    y = 0;
-                }
-                if((i & 1) == 0) {
-                    v = (0xff & yuv420sp[uvp++]) - 128;
-                    u = (0xff & yuv420sp[uvp++]) - 128;
-                }
-
-                // 指定範囲内なら黒でマスクする
-                if(isMask(y, u, v, saturation, hueStart, hueEnd)) {
-                    rgb[yp] = 0xff000000;
-                }
-            }
-        }
-    }
-
     // hueStartからhueEndの色相かを調べる
     // ただし彩度についても考慮する
-    private static boolean isMask(int y, int u, int v, int saturation, int hueStart, int hueEnd) {
-        int y1192 = 1192 * y;
-        int r = y1192 + 1634 * v;
-        int g = y1192 - 833 * v - 400 * u;
-        int b = y1192 + 2066 * u;
-
+    @Override
+    public boolean isMask(int r, int g, int b) {
         float max = max(r, g, b);
         float min = min(r, g, b);
 
         float contrast = (max - min) / max * 255;
 
         // 差が小さいなら彩度Sも小さいので計算しない
-        if(contrast <= saturation) {
+        if(contrast <= mSaturation) {
             return false;
         }
 
@@ -66,7 +60,7 @@ public class ColorFilter {
             hue = 60 * (r - g) / (max - min) + 240;
         }
 
-        if(hue >= hueStart && hue <= hueEnd) {
+        if(hue >= mHueStart && hue <= mHueEnd) {
             return true;
         }
         return false;

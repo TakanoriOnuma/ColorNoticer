@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import jp.co.sendai.national.college.of.technology.colortransfar.ColorTransfar;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,6 +41,8 @@ public class MainActivity extends ActionBarActivity
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence mTitle;
+
+    private ColorTransfar mColorTransfar;
 
     private SurfaceView mSvFacePreview;
     private SurfaceHolder mSurfaceHolder;
@@ -225,7 +226,7 @@ public class MainActivity extends ActionBarActivity
             // byte[]をint[]に変換（明度のみ）
             int[] frame = mImageData;
 
-            ColorTransfar.decodeYUV420SP(frame, data, mPreviewSize.width, mPreviewSize.height);
+            mColorTransfar.decodeYUV420SP(frame, data, mPreviewSize.width, mPreviewSize.height);
 
             // Bitmapに描画して、OverLayに再描画を促す
             mBitmap.setPixels(frame, 0, mPreviewSize.width,
@@ -286,6 +287,9 @@ public class MainActivity extends ActionBarActivity
                 mBitmap.setPixels(mImageData, 0, mPreviewSize.width,
                         0, 0, mPreviewSize.width, mPreviewSize.height);
                 mOverLay.setBitmap(mBitmap);
+
+                // 色変換クラスの作成
+                mColorTransfar = new ColorTransfar();
 
                 // フレームバッファを追加
                 mCamera.setPreviewCallbackWithBuffer(this);

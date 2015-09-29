@@ -1,9 +1,20 @@
 package jp.co.sendai.national.college.of.technology.colortransfar;
 
 public class ColorTransfar {
+    private ColorFilter mColorFilter = null;
+
+    public ColorTransfar() {
+    }
+    public ColorTransfar(ColorFilter colorFilter) {
+        mColorFilter = colorFilter;
+    }
+
+    public void setColorFilter(ColorFilter colorFilter) {
+        mColorFilter = colorFilter;
+    }
     // NV21からRGBに変換する関数
     // 参考URL: http://www.41post.com/3470/programming/android-retrieving-the-camera-preview-as-a-pixel-array
-    public static void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {
+    public void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {
         int frameSize = width * height;
         for(int j = 0, yp = 0; j < height; j++) {
             int u = 0;
@@ -24,6 +35,14 @@ public class ColorTransfar {
                 int r = y1192 + 1634 * v;
                 int g = y1192 - 833 * v - 400 * u;
                 int b = y1192 + 2066 * u;
+
+                if(mColorFilter != null) {
+                    // マスクする必要があるなら、黒にして次へ
+                    if(mColorFilter.isMask(r, g, b)) {
+                        rgb[yp] = 0xff000000;
+                        continue;
+                    }
+                }
 
                 // 262143 = 2^18 - 1 = 16^4 * 2^2 - 1
                 r = (r < 0) ? 0 : (r < 262143) ? r : 262143;
