@@ -1,4 +1,4 @@
-package jp.co.sendai.national.college.of.technology;
+package jp.co.sendai.national.college.of.technology.colortransfar;
 
 public class ColorTransfar {
     // NV21からRGBに変換する関数

@@ -1,4 +1,4 @@
-package jp.co.sendai.national.college.of.technology;
+package jp.co.sendai.national.college.of.technology.colortransfar;
 
 public class ColorFilter {
     public static void colorFilter(int rgb[], int alpha, int red, int green, int blue) {

@@ -3,6 +3,8 @@ package jp.co.sendai.national.college.of.technology;
 import java.io.IOException;
 import java.util.List;
 
+import jp.co.sendai.national.college.of.technology.colortransfar.ColorTransfar;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;

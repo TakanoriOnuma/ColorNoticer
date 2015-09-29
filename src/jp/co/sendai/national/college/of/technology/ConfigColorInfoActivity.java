@@ -3,6 +3,8 @@ package jp.co.sendai.national.college.of.technology;
 import java.io.IOException;
 import java.util.List;
 
+import jp.co.sendai.national.college.of.technology.colortransfar.ColorFilter;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
