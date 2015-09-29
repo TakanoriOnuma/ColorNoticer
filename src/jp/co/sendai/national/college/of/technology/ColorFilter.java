@@ -11,45 +11,39 @@ public class ColorFilter {
         }
     }
 
-    public static void mask(int[] rgb, byte[] data, int width, int height,
+    public static void mask(int[] rgb, byte[] yuv420sp, int width, int height,
             int saturation, int hueStart, int hueEnd) {
-        int size = width*height;
-        int offset = size;
-        int u, v, y1, y2, y3, y4;
+        int frameSize = width * height;
+        for(int j = 0, yp = 0; j < height; j++) {
+            int u = 0;
+            int v = 0;
+            int uvp = frameSize + (j >> 1) * width;
 
-        // i percorre os Y and the final pixels
-        // k percorre os pixles U e V
-        for(int i=0, k=0; i < size; i+=2, k+=2) {
-            y1 = data[i  ]&0xff;
-            y2 = data[i+1]&0xff;
-            y3 = data[width+i  ]&0xff;
-            y4 = data[width+i+1]&0xff;
+            for(int i = 0; i < width; i++, yp++) {
+                int y = (0xff & ((int)yuv420sp[yp])) - 16;
+                if(y < 0) {
+                    y = 0;
+                }
+                if((i & 1) == 0) {
+                    v = (0xff & yuv420sp[uvp++]) - 128;
+                    u = (0xff & yuv420sp[uvp++]) - 128;
+                }
 
-            u = data[offset+k  ]&0xff;
-            v = data[offset+k+1]&0xff;
-            u = u-128;
-            v = v-128;
-
-            if(isMask(y1, u, v, saturation, hueStart, hueEnd))
-                rgb[i  ] = 0xff000000;
-            if(isMask(y2, u, v, saturation, hueStart, hueEnd))
-                rgb[i+1] = 0xff000000;
-            if(isMask(y3, u, v, saturation, hueStart, hueEnd))
-                rgb[width+i  ] = 0xff000000;
-            if(isMask(y4, u, v, saturation, hueStart, hueEnd))
-                rgb[width+i+1] = 0xff000000;
-
-            if (i!=0 && (i+2)%width==0)
-                i+=width;
+                // 指定範囲内なら黒でマスクする
+                if(isMask(y, u, v, saturation, hueStart, hueEnd)) {
+                    rgb[yp] = 0xff000000;
+                }
+            }
         }
     }
 
     // hueStartからhueEndの色相かを調べる
     // ただし彩度についても考慮する
     private static boolean isMask(int y, int u, int v, int saturation, int hueStart, int hueEnd) {
-        float r = y + 1.402f * v;
-        float g = y + -0.344f * u - 0.714f * v;
-        float b = y + 1.772f * u;
+        int y1192 = 1192 * y;
+        int r = y1192 + 1634 * v;
+        int g = y1192 - 833 * v - 400 * u;
+        int b = y1192 + 2066 * u;
 
         float max = max(r, g, b);
         float min = min(r, g, b);
@@ -78,13 +72,13 @@ public class ColorFilter {
         return false;
     }
 
-    private static float max(float a, float b, float c) {
+    private static float max(int a, int b, int c) {
         if(a > b) {
             return (a > c) ? a : c;
         }
         return (b > c) ? b : c;
     }
-    private static float min(float a, float b, float c) {
+    private static float min(int a, int b, int c) {
         if(a < b) {
             return (a < c) ? a : c;
         }
