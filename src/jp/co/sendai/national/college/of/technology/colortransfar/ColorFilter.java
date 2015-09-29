@@ -2,8 +2,11 @@ package jp.co.sendai.national.college.of.technology.colortransfar;
 
 public class ColorFilter implements IColorFilter {
     private int mSaturation = 0;
-    private int mHueStart = -60;
-    private int mHueEnd = -60;
+    private int mHueStart   = -60;
+    private int mHueEnd     = -60;
+
+    private int mFrameNum     = 0;
+    private boolean mMaskFlag = false;
 
     // コンストラクタ
     public ColorFilter() {
@@ -38,7 +41,10 @@ public class ColorFilter implements IColorFilter {
     // hueStartからhueEndの色相かを調べる
     // ただし彩度についても考慮する
     @Override
-    public boolean isMask(int r, int g, int b) {
+    public boolean isMask(int r, int g, int b, int frameNum, int periodFrameNum) {
+        if(frameNum < periodFrameNum / 2)
+            return false;
+
         float max = max(r, g, b);
         float min = min(r, g, b);
 
