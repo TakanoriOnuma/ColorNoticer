@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import jp.co.sendai.national.college.of.technology.colortransfar.ColorFilter;
-
+import jp.co.sendai.national.college.of.technology.colortransfar.ColorTransfar;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -28,6 +28,9 @@ import android.widget.TextView;
 public class ConfigColorFilterActivity extends Activity
         implements SurfaceHolder.Callback, Camera.PreviewCallback, View.OnClickListener {
     private static final String TAG = "ConfigColorFilterActivity";
+
+    private ColorTransfar mColorTransfar;
+    private ColorFilter   mColorFilter;
 
     private SurfaceView mSvFacePreview;
     private SurfaceHolder mSurfaceHolder;
@@ -118,9 +121,6 @@ public class ConfigColorFilterActivity extends Activity
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         if(mCamera != null) {
-            // byte[]をint[]に変換
-            int[] frame = mImageData;
-
             TextView colorProperties = (TextView)findViewById(R.id.ColorProperties);
             int alpha = mAlphaColorBar.getProgress() & 0xff;
             int red   = mRedColorBar.getProgress()   & 0xff;
@@ -128,10 +128,13 @@ public class ConfigColorFilterActivity extends Activity
             int blue  = mBlueColorBar.getProgress()  & 0xff;
             colorProperties.setText(String.format("%d, %d, %d, %d", alpha, red, green, blue));
 
-            ColorFilter.colorFilter(frame, alpha, red, green, blue);
+            mColorFilter.setRedRate(red);
+            mColorFilter.setGreenRate(green);
+            mColorFilter.setBlueRate(blue);
+            mColorTransfar.decodeYUV420SP(mImageData, data, mPreviewSize.width, mPreviewSize.height);
 
             // Bitmapに描画して、OverLayに再描画を促す
-            mBitmap.setPixels(frame, 0, mPreviewSize.width,
+            mBitmap.setPixels(mImageData, 0, mPreviewSize.width,
                     0, 0, mPreviewSize.width, mPreviewSize.height);
             mOverLay.invalidate();
 
@@ -189,6 +192,10 @@ public class ConfigColorFilterActivity extends Activity
                 mBitmap.setPixels(mImageData, 0, mPreviewSize.width,
                         0, 0, mPreviewSize.width, mPreviewSize.height);
                 mOverLay.setBitmap(mBitmap);
+
+                // 色変換クラスの用意
+                mColorFilter   = new ColorFilter();
+                mColorTransfar = new ColorTransfar(mColorFilter);
 
                 // フレームバッファを追加
                 mCamera.setPreviewCallbackWithBuffer(this);
