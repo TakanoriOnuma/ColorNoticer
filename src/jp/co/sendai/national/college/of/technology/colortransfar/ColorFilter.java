@@ -5,10 +5,6 @@ public class ColorFilter implements IColorFilter {
     private int mHueStart   = -60;
     private int mHueEnd     = -60;
 
-    private int mRedRate   = 100;
-    private int mGreenRate = 100;
-    private int mBlueRate  = 100;
-
     // コンストラクタ
     public ColorFilter() {
     }
@@ -27,15 +23,6 @@ public class ColorFilter implements IColorFilter {
     }
     public void setHueEnd(int hueEnd) {
         mHueEnd = hueEnd;
-    }
-    public void setRedRate(int redRate) {
-        mRedRate = redRate;
-    }
-    public void setGreenRate(int greenRate) {
-        mGreenRate = greenRate;
-    }
-    public void setBlueRate(int blueRate) {
-        mBlueRate = blueRate;
     }
 
     public static void colorFilter(int rgb[], int alpha, int red, int green, int blue) {
@@ -93,12 +80,5 @@ public class ColorFilter implements IColorFilter {
             return (a < c) ? a : c;
         }
         return (b < c) ? b : c;
-    }
-
-    @Override
-    public void filtering(int[] rgb) {
-        rgb[0] = rgb[0] * mRedRate   / 100;
-        rgb[1] = rgb[1] * mGreenRate / 100;
-        rgb[2] = rgb[2] * mBlueRate  / 100;
     }
 }

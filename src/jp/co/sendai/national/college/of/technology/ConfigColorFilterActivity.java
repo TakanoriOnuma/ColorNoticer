@@ -3,8 +3,8 @@ package jp.co.sendai.national.college.of.technology;
 import java.io.IOException;
 import java.util.List;
 
-import jp.co.sendai.national.college.of.technology.colortransfar.ColorFilter;
 import jp.co.sendai.national.college.of.technology.colortransfar.ColorTransfar;
+import jp.co.sendai.national.college.of.technology.colortransfar.ColorValueTransfar;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -29,8 +29,8 @@ public class ConfigColorFilterActivity extends Activity
         implements SurfaceHolder.Callback, Camera.PreviewCallback, View.OnClickListener {
     private static final String TAG = "ConfigColorFilterActivity";
 
-    private ColorTransfar mColorTransfar;
-    private ColorFilter   mColorFilter;
+    private ColorTransfar      mColorTransfar;
+    private ColorValueTransfar mColorValueTransfar;
 
     private SurfaceView mSvFacePreview;
     private SurfaceHolder mSurfaceHolder;
@@ -128,9 +128,9 @@ public class ConfigColorFilterActivity extends Activity
             int blue  = mBlueColorBar.getProgress()  & 0xff;
             colorProperties.setText(String.format("%d, %d, %d, %d", alpha, red, green, blue));
 
-            mColorFilter.setRedRate(red);
-            mColorFilter.setGreenRate(green);
-            mColorFilter.setBlueRate(blue);
+            mColorValueTransfar.setRedRate(red);
+            mColorValueTransfar.setGreenRate(green);
+            mColorValueTransfar.setBlueRate(blue);
             mColorTransfar.decodeYUV420SP(mImageData, data, mPreviewSize.width, mPreviewSize.height);
 
             // Bitmapに描画して、OverLayに再描画を促す
@@ -194,8 +194,8 @@ public class ConfigColorFilterActivity extends Activity
                 mOverLay.setBitmap(mBitmap);
 
                 // 色変換クラスの用意
-                mColorFilter   = new ColorFilter();
-                mColorTransfar = new ColorTransfar(mColorFilter);
+                mColorValueTransfar = new ColorValueTransfar();
+                mColorTransfar      = new ColorTransfar(mColorValueTransfar);
 
                 // フレームバッファを追加
                 mCamera.setPreviewCallbackWithBuffer(this);

@@ -1,19 +1,26 @@
 package jp.co.sendai.national.college.of.technology.colortransfar;
 
 public class ColorTransfar {
-    private ColorFilter mColorFilter = null;
+    private IColorFilter mColorFilter = null;
+    private IColorValueTransfar mColorValueTransfar = null;
 
     private int mFrameNum       = 0;
     private int mPeriodFrameNum = 10;
 
     public ColorTransfar() {
     }
-    public ColorTransfar(ColorFilter colorFilter) {
+    public ColorTransfar(IColorFilter colorFilter) {
         mColorFilter = colorFilter;
     }
+    public ColorTransfar(IColorValueTransfar colorValueTransfar) {
+        mColorValueTransfar = colorValueTransfar;
+    }
 
-    public void setColorFilter(ColorFilter colorFilter) {
+    public void setColorFilter(IColorFilter colorFilter) {
         mColorFilter = colorFilter;
+    }
+    public void setColorValueTransfar(IColorValueTransfar colorValueTransfar) {
+        mColorValueTransfar = colorValueTransfar;
     }
     // NV21からRGBに変換する関数
     // 参考URL: http://www.41post.com/3470/programming/android-retrieving-the-camera-preview-as-a-pixel-array
@@ -49,7 +56,9 @@ public class ColorTransfar {
                         rgbs[yp] = 0xff000000;
                         continue;
                     }
-                    mColorFilter.filtering(rgb);
+                }
+                if(mColorValueTransfar != null) {
+                    mColorValueTransfar.colorTranslate(rgb);
                 }
 
                 // 262143 = 2^18 - 1 = 16^4 * 2^2 - 1
