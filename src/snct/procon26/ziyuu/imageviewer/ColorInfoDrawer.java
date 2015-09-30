@@ -37,7 +37,7 @@ public class ColorInfoDrawer {
         mWhitePaint.setStrokeWidth(3);
 
         mFillWhitePaint = new Paint();
-        mFillWhitePaint.setColor(0x77ffffff);
+        mFillWhitePaint.setColor(0x88ffffff);
         mFillWhitePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         mTextPaint = new Paint();
@@ -69,19 +69,50 @@ public class ColorInfoDrawer {
         canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + 4 * height + 2, mFillWhitePaint);
         canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + 4 * height + 2, mBlackPaint);
 
-        text = String.format("色名:%s", "色名");
+        String colorName = getColorName(mHSV);
+        text = String.format("%s", colorName);
         canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
 
         pt.y += height;
-        text = String.format("R:%3d H:%3d", mRGB[0], mHSV[0]);
+        text = String.format("R:%3d", mRGB[0]);
         canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
+        text = String.format("H:%3d", mHSV[0]);
+        canvas.drawText(text, pt.x + textWidth / 2, pt.y - fontMetrics.top, mTextPaint);
 
         pt.y += height;
-        text = String.format("G:%3d S:%3d", mRGB[1], mHSV[1]);
+        text = String.format("G:%3d", mRGB[1]);
         canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
+        text = String.format("S:%3d", mHSV[1]);
+        canvas.drawText(text, pt.x + textWidth / 2, pt.y - fontMetrics.top, mTextPaint);
 
         pt.y += height;
-        text = String.format("B:%3d V:%3d", mRGB[2], mHSV[2]);
+        text = String.format("B:%3d", mRGB[2]);
         canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
+        text = String.format("V:%3d", mHSV[2]);
+        canvas.drawText(text, pt.x + textWidth / 2, pt.y - fontMetrics.top, mTextPaint);
+    }
+
+    public String getColorName(int[] hsv) {
+        if(hsv[0] < 30) {
+            return "赤色";
+        }
+        else if(hsv[0] < 90) {
+            return "黄色";
+        }
+        else if(hsv[0] < 150) {
+            return "緑色";
+        }
+        else if(hsv[0] < 210) {
+            return "水色";
+        }
+        else if(hsv[0] < 270) {
+            return "青色";
+        }
+        else if(hsv[0] < 330) {
+            return "紫色";
+        }
+        else {
+            return "赤色";
+        }
     }
 }
