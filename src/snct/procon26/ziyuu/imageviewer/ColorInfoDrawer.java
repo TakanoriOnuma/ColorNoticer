@@ -37,7 +37,7 @@ public class ColorInfoDrawer {
         mWhitePaint.setStrokeWidth(3);
 
         mFillWhitePaint = new Paint();
-        mFillWhitePaint.setColor(Color.WHITE);
+        mFillWhitePaint.setColor(0x77ffffff);
         mFillWhitePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         mTextPaint = new Paint();
@@ -65,7 +65,9 @@ public class ColorInfoDrawer {
         float  textWidth = mTextPaint.measureText(text);
 
         pt.x += mCursorSize;
-        canvas.drawRect(pt.x, pt.y, pt.x + textWidth, pt.y + 4 * height, mFillWhitePaint);
+        pt.y += mCursorSize;
+        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + 4 * height + 2, mFillWhitePaint);
+        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + 4 * height + 2, mBlackPaint);
 
         text = String.format("色名:%s", "色名");
         canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
