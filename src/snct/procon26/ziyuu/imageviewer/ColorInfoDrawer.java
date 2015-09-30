@@ -1,9 +1,9 @@
 package snct.procon26.ziyuu.imageviewer;
 
-import snct.procon26.ziyuu.colortransfar.ColorTransfar;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.FontMetrics;
 import android.graphics.Point;
 
 public class ColorInfoDrawer {
@@ -47,22 +47,28 @@ public class ColorInfoDrawer {
         mColorInfo = colorInfo;
     }
 
-    public void drawColorInfo(Canvas canvas, Point pt) {
+    public void drawColorInfo(Canvas canvas, Point pos) {
+        Point pt = new Point(pos.x, pos.y);
         canvas.drawCircle(pt.x, pt.y, mCursorSize, mBlackPaint);
         canvas.drawCircle(pt.x, pt.y, mCursorSize + mBlackPaint.getStrokeWidth(), mWhitePaint);
+
+        FontMetrics fontMetrics = mTextPaint.getFontMetrics();
+        float height = -fontMetrics.top + fontMetrics.bottom;
 
         mRGB[0] = (mColorInfo >> 16) & 0xff;
         mRGB[1] = (mColorInfo >> 8)  & 0xff;
         mRGB[2] =  mColorInfo        & 0xff;
         String text = String.format("%3d, %3d, %3d", mRGB[0], mRGB[1], mRGB[2]);
         float  textWidth = mTextPaint.measureText(text);
-        canvas.drawRect(pt.x + 100, pt.y + 100 - 50, pt.x + 100 + textWidth, pt.y + 120, mFillWhitePaint);
-        canvas.drawText(text, pt.x + 100, pt.y + 100, mTextPaint);
 
-        ColorTransfar.transRGBtoHSV(mRGB, mHSV);
-        text = String.format("%3d, %3d, %3d", mHSV[0], mHSV[1], mHSV[2]);
-        textWidth = mTextPaint.measureText(text);
-        canvas.drawRect(pt.x + 100, pt.y + 100 - 50 + 50, pt.x + 100 + textWidth, pt.y + 120 + 50, mFillWhitePaint);
-        canvas.drawText(text, pt.x + 100, pt.y + 100 + 50, mTextPaint);
+        pt.x += mCursorSize;
+        canvas.drawRect(pt.x, pt.y, pt.x + textWidth, pt.y + height, mFillWhitePaint);
+        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
+
+//        ColorTransfar.transRGBtoHSV(mRGB, mHSV);
+//        text = String.format("%3d, %3d, %3d", mHSV[0], mHSV[1], mHSV[2]);
+//        textWidth = mTextPaint.measureText(text);
+//        canvas.drawRect(pt.x + 100, pt.y + 100 - 50 + 50, pt.x + 100 + textWidth, pt.y + 120 + 50, mFillWhitePaint);
+//        canvas.drawText(text, pt.x + 100, pt.y + 100 + 50, mTextPaint);
     }
 }
