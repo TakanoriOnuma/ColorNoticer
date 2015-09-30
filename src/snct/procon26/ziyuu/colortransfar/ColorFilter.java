@@ -1,4 +1,4 @@
-package jp.co.sendai.national.college.of.technology.colortransfar;
+package snct.procon26.ziyuu.colortransfar;
 
 public class ColorFilter implements IColorFilter {
     private int mSaturation = 0;

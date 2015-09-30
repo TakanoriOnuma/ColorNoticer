@@ -65,7 +65,7 @@
             android:id="@+id/FacePreview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <jp.co.sendai.national.college.of.technology.OverLayView
+        <snct.procon26.ziyuu.OverLayView
             android:id="@+id/OverLayView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

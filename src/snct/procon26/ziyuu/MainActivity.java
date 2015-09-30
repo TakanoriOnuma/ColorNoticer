@@ -1,9 +1,11 @@
-package jp.co.sendai.national.college.of.technology;
+package snct.procon26.ziyuu;
 
 import java.io.IOException;
 import java.util.List;
 
-import jp.co.sendai.national.college.of.technology.colortransfar.ColorTransfar;
+import snct.procon26.ziyuu.colortransfar.ColorTransfar;
+
+import jp.co.sendai.national.college.of.technology.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;

@@ -6,5 +6,5 @@
     android:choiceMode="singleChoice"
     android:divider="@android:color/transparent"
     android:dividerHeight="0dp"
-    tools:context="jp.co.sendai.national.college.of.technology.NavigationDrawerFragment" />
+    tools:context="snct.procon26.ziyuu.NavigationDrawerFragment" />
 

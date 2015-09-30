@@ -1,4 +1,4 @@
-package jp.co.sendai.national.college.of.technology;
+package snct.procon26.ziyuu;
 
 import android.content.Context;
 import android.graphics.Bitmap;
