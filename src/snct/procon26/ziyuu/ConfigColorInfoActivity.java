@@ -5,6 +5,7 @@ import java.util.List;
 
 import snct.procon26.ziyuu.colortransfar.ColorFilter;
 import snct.procon26.ziyuu.colortransfar.ColorTransfar;
+import snct.procon26.ziyuu.imageviewer.ImageViewer;
 
 import jp.co.sendai.national.college.of.technology.R;
 import android.app.Activity;
@@ -43,7 +44,7 @@ public class ConfigColorInfoActivity extends Activity
     private byte[] mFrameBuffer;
     private int[]  mImageData;
     private Bitmap mBitmap;
-    private OverLayView mOverLay;
+    private ImageViewer mOverLay;
 
     private SeekBar mSaturationBar;
     private SeekBar mHueStartBar;
@@ -77,7 +78,7 @@ public class ConfigColorInfoActivity extends Activity
         Button saveButton = (Button)findViewById(R.id.SaveButton);
         saveButton.setOnClickListener(this);
 
-        mOverLay = (OverLayView)findViewById(R.id.OverLayView);
+        mOverLay = (ImageViewer)findViewById(R.id.OverLayView);
     }
 
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {

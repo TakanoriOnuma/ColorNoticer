@@ -19,7 +19,7 @@
             android:id="@+id/FacePreview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <snct.procon26.ziyuu.OverLayView
+        <snct.procon26.ziyuu.imageviewer.ImageViewer
             android:id="@+id/OverLayView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

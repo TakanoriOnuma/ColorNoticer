@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import snct.procon26.ziyuu.colortransfar.ColorTransfar;
+import snct.procon26.ziyuu.imageviewer.ImageViewer;
 
 import jp.co.sendai.national.college.of.technology.R;
 import android.app.Activity;
@@ -55,7 +56,7 @@ public class MainActivity extends ActionBarActivity
     private byte[] mFrameBuffer;
     private int[]  mImageData;
     private Bitmap mBitmap;
-    private OverLayView mOverLay;
+    private ImageViewer mOverLay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class MainActivity extends ActionBarActivity
         mSurfaceHolder = mSvFacePreview.getHolder();
         mSurfaceHolder.addCallback(this);
 
-        mOverLay = (OverLayView)findViewById(R.id.OverLayView);
+        mOverLay = (ImageViewer)findViewById(R.id.OverLayView);
     }
 
     @Override

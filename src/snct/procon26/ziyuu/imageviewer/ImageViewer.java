@@ -1,4 +1,4 @@
-package snct.procon26.ziyuu;
+package snct.procon26.ziyuu.imageviewer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-public class OverLayView extends View {
+public class ImageViewer extends View {
     private Bitmap mBitmap     = null;
     private Rect   mBitmapRect = null;
     private Rect   mViewRect   = new Rect(0, 0, 0, 0);
@@ -24,12 +24,12 @@ public class OverLayView extends View {
     private Paint mFillWhitePaint;
     private Paint mTextPaint;
 
-    public OverLayView(Context context) {
+    public ImageViewer(Context context) {
         super(context);
         init();
     }
 
-    public OverLayView(Context context, AttributeSet attrs) {
+    public ImageViewer(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
