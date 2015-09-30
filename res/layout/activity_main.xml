@@ -4,7 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jp.co.sendai.national.college.of.technology.MainActivity" >
+    tools:context="snct.procon26.ziyuu.MainActivity" >
 
     <!--
          As the main content view, the view below consumes the entire
@@ -19,7 +19,7 @@
             android:id="@+id/FacePreview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <jp.co.sendai.national.college.of.technology.OverLayView
+        <snct.procon26.ziyuu.imageviewer.ImageViewer
             android:id="@+id/OverLayView"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -39,7 +39,7 @@
 
     <fragment
         android:id="@+id/navigation_drawer"
-        android:name="jp.co.sendai.national.college.of.technology.NavigationDrawerFragment"
+        android:name="snct.procon26.ziyuu.NavigationDrawerFragment"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start" />

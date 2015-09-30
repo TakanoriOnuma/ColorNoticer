@@ -1,8 +1,12 @@
-package jp.co.sendai.national.college.of.technology;
+package snct.procon26.ziyuu;
 
 import java.io.IOException;
 import java.util.List;
 
+import snct.procon26.ziyuu.colortransfar.ColorTransfar;
+import snct.procon26.ziyuu.imageviewer.ImageViewer;
+
+import jp.co.sendai.national.college.of.technology.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -41,6 +45,8 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    private ColorTransfar mColorTransfar;
+
     private SurfaceView mSvFacePreview;
     private SurfaceHolder mSurfaceHolder;
     private Camera mCamera = null;
@@ -50,7 +56,7 @@ public class MainActivity extends ActionBarActivity
     private byte[] mFrameBuffer;
     private int[]  mImageData;
     private Bitmap mBitmap;
-    private OverLayView mOverLay;
+    private ImageViewer mOverLay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +77,7 @@ public class MainActivity extends ActionBarActivity
         mSurfaceHolder = mSvFacePreview.getHolder();
         mSurfaceHolder.addCallback(this);
 
-        mOverLay = (OverLayView)findViewById(R.id.OverLayView);
+        mOverLay = (ImageViewer)findViewById(R.id.OverLayView);
     }
 
     @Override
@@ -99,6 +105,10 @@ public class MainActivity extends ActionBarActivity
             break;
         case 3:
             mTitle = getString(R.string.title_section3);
+            surfaceDestroyed(mSurfaceHolder);
+
+            intent = new Intent(MainActivity.this, ConfigColorInfoActivity.class);
+            startActivity(intent);
             break;
         }
     }
@@ -219,7 +229,7 @@ public class MainActivity extends ActionBarActivity
             // byte[]をint[]に変換（明度のみ）
             int[] frame = mImageData;
 
-            ColorTransfar.convertYUV420_NV21toRGB8888(frame, data, mPreviewSize.width, mPreviewSize.height);
+            mColorTransfar.decodeYUV420SP(frame, data, mPreviewSize.width, mPreviewSize.height);
 
             // Bitmapに描画して、OverLayに再描画を促す
             mBitmap.setPixels(frame, 0, mPreviewSize.width,
@@ -280,6 +290,9 @@ public class MainActivity extends ActionBarActivity
                 mBitmap.setPixels(mImageData, 0, mPreviewSize.width,
                         0, 0, mPreviewSize.width, mPreviewSize.height);
                 mOverLay.setBitmap(mBitmap);
+
+                // 色変換クラスの作成
+                mColorTransfar = new ColorTransfar();
 
                 // フレームバッファを追加
                 mCamera.setPreviewCallbackWithBuffer(this);

@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="jp.co.sendai.national.college.of.technology.MainActivity"
+            android:name="snct.procon26.ziyuu.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape" >
             <intent-filter>
@@ -23,7 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="jp.co.sendai.national.college.of.technology.ConfigColorFilterActivity"
+        <activity android:name="snct.procon26.ziyuu.ConfigColorFilterActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape">
+        </activity>
+        <activity android:name="snct.procon26.ziyuu.ConfigColorInfoActivity"
             android:label="@string/app_name"
             android:screenOrientation="landscape">
         </activity>
