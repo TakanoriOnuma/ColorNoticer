@@ -1,5 +1,6 @@
 package snct.procon26.ziyuu.imageviewer;
 
+import snct.procon26.ziyuu.colortransfar.ColorTransfar;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,6 +13,10 @@ public class ColorInfoDrawer {
     private Paint mWhitePaint;
     private Paint mFillWhitePaint;
     private Paint mTextPaint;
+
+    // 演算用バッファ
+    private int[] mRGB = new int[3];
+    private int[] mHSV = new int[3];
 
     public ColorInfoDrawer() {
         init();
@@ -46,9 +51,18 @@ public class ColorInfoDrawer {
         canvas.drawCircle(pt.x, pt.y, mCursorSize, mBlackPaint);
         canvas.drawCircle(pt.x, pt.y, mCursorSize + mBlackPaint.getStrokeWidth(), mWhitePaint);
 
-        int rgb = mColorInfo;
-        String text = String.format("%d, %d, %d, %d", ((rgb >> 24) & 0xff), ((rgb >> 16) & 0xff), ((rgb >> 8) & 0xff), (rgb & 0xff));
-        canvas.drawRect(pt.x + 100, pt.y + 100 - 50, pt.x + 360, pt.y + 120, mFillWhitePaint);
+        mRGB[0] = (mColorInfo >> 16) & 0xff;
+        mRGB[1] = (mColorInfo >> 8)  & 0xff;
+        mRGB[2] =  mColorInfo        & 0xff;
+        String text = String.format("%3d, %3d, %3d", mRGB[0], mRGB[1], mRGB[2]);
+        float  textWidth = mTextPaint.measureText(text);
+        canvas.drawRect(pt.x + 100, pt.y + 100 - 50, pt.x + 100 + textWidth, pt.y + 120, mFillWhitePaint);
         canvas.drawText(text, pt.x + 100, pt.y + 100, mTextPaint);
+
+        ColorTransfar.transRGBtoHSV(mRGB, mHSV);
+        text = String.format("%3d, %3d, %3d", mHSV[0], mHSV[1], mHSV[2]);
+        textWidth = mTextPaint.measureText(text);
+        canvas.drawRect(pt.x + 100, pt.y + 100 - 50 + 50, pt.x + 100 + textWidth, pt.y + 120 + 50, mFillWhitePaint);
+        canvas.drawText(text, pt.x + 100, pt.y + 100 + 50, mTextPaint);
     }
 }

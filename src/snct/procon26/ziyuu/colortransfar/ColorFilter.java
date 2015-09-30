@@ -1,5 +1,7 @@
 package snct.procon26.ziyuu.colortransfar;
 
+import snct.procon26.ziyuu.functions.MyFunction;
+
 public class ColorFilter implements IColorFilter {
     private int mSaturation = 0;
     private int mHueStart   = -60;
@@ -42,17 +44,20 @@ public class ColorFilter implements IColorFilter {
         if(frameNum < periodFrameNum / 2)
             return false;
 
-        float max = max(r, g, b);
-        float min = min(r, g, b);
+        int max = MyFunction.max(r, g, b);
+        if(max == 0) {
+            return false;
+        }
 
-        float contrast = (max - min) / max * 255;
+        int min = MyFunction.min(r, g, b);
+        int contrast = 255 * (max - min) / max;
 
         // 差が小さいなら彩度Sも小さいので計算しない
         if(contrast <= mSaturation) {
             return false;
         }
 
-        float hue;
+        int hue;
         if(max == r) {
             hue = 60 * (g - b) / (max - min);
         }
@@ -67,18 +72,5 @@ public class ColorFilter implements IColorFilter {
             return true;
         }
         return false;
-    }
-
-    private static float max(int a, int b, int c) {
-        if(a > b) {
-            return (a > c) ? a : c;
-        }
-        return (b > c) ? b : c;
-    }
-    private static float min(int a, int b, int c) {
-        if(a < b) {
-            return (a < c) ? a : c;
-        }
-        return (b < c) ? b : c;
     }
 }

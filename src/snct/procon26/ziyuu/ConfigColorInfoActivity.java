@@ -137,7 +137,7 @@ public class ConfigColorInfoActivity extends Activity
 
             Point pos = mOverLay.getCursorPoint();
             Rect  viewRect = mOverLay.getViewRect();
-            int color = mColorTransfar.getColor(data, mPreviewSize.width, mPreviewSize.height,
+            int color = ColorTransfar.getColor(data, mPreviewSize.width, mPreviewSize.height,
                     mPreviewSize.width * pos.x / viewRect.right, mPreviewSize.height * pos.y / viewRect.bottom);
             mColorInfoDrawer.setColorInfo(color);
 

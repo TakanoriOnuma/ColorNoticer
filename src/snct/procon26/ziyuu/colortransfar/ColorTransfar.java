@@ -1,5 +1,7 @@
 package snct.procon26.ziyuu.colortransfar;
 
+import snct.procon26.ziyuu.functions.MyFunction;
+
 
 public class ColorTransfar {
     private IColorFilter mColorFilter = null;
@@ -74,7 +76,7 @@ public class ColorTransfar {
 
     // NV21からRGBに変換する関数を参考に
     // 指定した座標の色を取得する
-    public int getColor(byte[] yuv420sp, int width, int height, int x, int y) {
+    public static int getColor(byte[] yuv420sp, int width, int height, int x, int y) {
         int frameSize = width * height;
         int[] rgb = new int[3];
         for(int j = 0, yp = 0; j < height; j++) {
@@ -110,5 +112,35 @@ public class ColorTransfar {
             }
         }
         return -1;
+    }
+
+    public static void transRGBtoHSV(int[] rgb, int[] hsv) {
+        int max = MyFunction.max(rgb[0], rgb[1], rgb[2]);
+        if(max == 0) {
+            hsv[0] = 0;
+            hsv[1] = 0;
+            hsv[2] = 0;
+            return;
+        }
+        int min = MyFunction.min(rgb[0], rgb[1], rgb[2]);
+
+        if(max == min) {
+            hsv[0] = 0;
+        }
+        else if(max == rgb[0]) {
+            hsv[0] = 60 * (rgb[1] - rgb[2]) / (max - min);
+            if(hsv[0] < 0) {
+                hsv[0] += 360;
+            }
+        }
+        else if(max == rgb[1]) {
+            hsv[0] = 60 * (rgb[2] - rgb[0]) / (max - min) + 120;
+        }
+        else {
+            hsv[0] = 60 * (rgb[0] - rgb[1]) / (max - min) + 240;
+        }
+
+        hsv[1] = 100 * (max - min) / max;
+        hsv[2] = 100 * max / 255;
     }
 }
