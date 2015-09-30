@@ -12,6 +12,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
@@ -130,9 +131,11 @@ public class ConfigColorFilterActivity extends Activity
             colorProperties.setText(String.format("%d, %d, %d, %d", alpha, red, green, blue));
 
             Point pos = mOverLay.getCursorPoint();
-            int color = mColorTransfar.getColor(data, mPreviewSize.width, mPreviewSize.height, pos.x, pos.y);
+            Rect  viewRect = mOverLay.getViewRect();
+            int color = mColorTransfar.getColor(data, mPreviewSize.width, mPreviewSize.height,
+                    mPreviewSize.width * pos.x / viewRect.right, mPreviewSize.height * pos.y / viewRect.bottom);
+            mOverLay.setColorInfo(color);
 
-            // オーバーレイ側で処理する？
             mColorValueTransfar.setRedRate(red);
             mColorValueTransfar.setGreenRate(green);
             mColorValueTransfar.setBlueRate(blue);

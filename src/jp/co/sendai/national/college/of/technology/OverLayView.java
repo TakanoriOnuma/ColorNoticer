@@ -16,6 +16,7 @@ public class OverLayView extends View {
     private Rect   mBitmapRect = null;
     private Rect   mViewRect   = new Rect(0, 0, 0, 0);
 
+    private int   mColorInfo;
     private Point mCursorPos;
     private float mCursorSize;
     private Paint mBlackPaint;
@@ -55,8 +56,8 @@ public class OverLayView extends View {
         mTextPaint.setTextSize(30);
     }
 
-    public void setColorInfo() {
-
+    public void setColorInfo(int colorInfo) {
+        mColorInfo = colorInfo;
     }
 
     // ゲッター
@@ -92,9 +93,9 @@ public class OverLayView extends View {
         canvas.drawCircle(mCursorPos.x, mCursorPos.y, mCursorSize, mBlackPaint);
         canvas.drawCircle(mCursorPos.x, mCursorPos.y, mCursorSize + mBlackPaint.getStrokeWidth(), mWhitePaint);
 
-        int rgb = mBitmap.getPixel(mCursorPos.x, mCursorPos.y);
-        String text = String.format("%d, %d, %d, %d", (rgb >> 24) & 0xff, (rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff);
-        canvas.drawRect(mCursorPos.x + 100, mCursorPos.y + 100 - 50, mCursorPos.x + 300, mCursorPos.y + 120, mFillWhitePaint);
+        int rgb = mColorInfo;
+        String text = String.format("%d, %d, %d, %d", ((rgb >> 24) & 0xff), ((rgb >> 16) & 0xff), ((rgb >> 8) & 0xff), (rgb & 0xff));
+        canvas.drawRect(mCursorPos.x + 100, mCursorPos.y + 100 - 50, mCursorPos.x + 360, mCursorPos.y + 120, mFillWhitePaint);
         canvas.drawText(text, mCursorPos.x + 100, mCursorPos.y + 100, mTextPaint);
     }
 

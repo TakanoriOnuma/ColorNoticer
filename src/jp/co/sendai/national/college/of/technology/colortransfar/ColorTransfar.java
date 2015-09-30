@@ -1,5 +1,6 @@
 package jp.co.sendai.national.college.of.technology.colortransfar;
 
+
 public class ColorTransfar {
     private IColorFilter mColorFilter = null;
     private IColorValueTransfar mColorValueTransfar = null;
@@ -82,6 +83,10 @@ public class ColorTransfar {
             int uvp = frameSize + (j >> 1) * width;
 
             for(int i = 0; i < width; i++, yp++) {
+                if((i & 1) == 0) {
+                    v = (0xff & yuv420sp[uvp++]) - 128;
+                    u = (0xff & yuv420sp[uvp++]) - 128;
+                }
                 if(x != i || y != j) {
                     continue;
                 }
@@ -89,10 +94,6 @@ public class ColorTransfar {
                 int _y = (0xff & ((int)yuv420sp[yp])) - 16;
                 if(_y < 0) {
                     _y = 0;
-                }
-                if((i & 1) == 0) {
-                    v = (0xff & yuv420sp[uvp++]) - 128;
-                    u = (0xff & yuv420sp[uvp++]) - 128;
                 }
 
                 int y1192 = 1192 * _y;
