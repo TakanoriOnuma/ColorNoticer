@@ -3,19 +3,16 @@ package snct.procon26.ziyuu;
 import java.io.IOException;
 import java.util.List;
 
+import jp.co.sendai.national.college.of.technology.R;
 import snct.procon26.ziyuu.colortransfar.ColorTransfar;
 import snct.procon26.ziyuu.colortransfar.ColorValueTransfar;
 import snct.procon26.ziyuu.imageviewer.ImageViewer;
-
-import jp.co.sendai.national.college.of.technology.R;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.ImageFormat;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
@@ -132,12 +129,6 @@ public class ConfigColorFilterActivity extends Activity
             int green = mGreenColorBar.getProgress() & 0xff;
             int blue  = mBlueColorBar.getProgress()  & 0xff;
             colorProperties.setText(String.format("%d, %d, %d, %d", alpha, red, green, blue));
-
-            Point pos = mOverLay.getCursorPoint();
-            Rect  viewRect = mOverLay.getViewRect();
-            int color = mColorTransfar.getColor(data, mPreviewSize.width, mPreviewSize.height,
-                    mPreviewSize.width * pos.x / viewRect.right, mPreviewSize.height * pos.y / viewRect.bottom);
-            mOverLay.setColorInfo(color);
 
             mColorValueTransfar.setRedRate(red);
             mColorValueTransfar.setGreenRate(green);

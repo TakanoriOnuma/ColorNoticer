@@ -3,17 +3,19 @@ package snct.procon26.ziyuu;
 import java.io.IOException;
 import java.util.List;
 
+import jp.co.sendai.national.college.of.technology.R;
 import snct.procon26.ziyuu.colortransfar.ColorFilter;
 import snct.procon26.ziyuu.colortransfar.ColorTransfar;
+import snct.procon26.ziyuu.imageviewer.ColorInfoDrawer;
 import snct.procon26.ziyuu.imageviewer.ImageViewer;
-
-import jp.co.sendai.national.college.of.technology.R;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.ImageFormat;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
@@ -45,6 +47,7 @@ public class ConfigColorInfoActivity extends Activity
     private int[]  mImageData;
     private Bitmap mBitmap;
     private ImageViewer mOverLay;
+    private ColorInfoDrawer mColorInfoDrawer;
 
     private SeekBar mSaturationBar;
     private SeekBar mHueStartBar;
@@ -79,6 +82,8 @@ public class ConfigColorInfoActivity extends Activity
         saveButton.setOnClickListener(this);
 
         mOverLay = (ImageViewer)findViewById(R.id.OverLayView);
+        mColorInfoDrawer = new ColorInfoDrawer();
+        mOverLay.setColorInfoDrawer(mColorInfoDrawer);
     }
 
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
@@ -129,6 +134,12 @@ public class ConfigColorInfoActivity extends Activity
             mColorFilter.setSaturation(saturation);
             mColorFilter.setHueStart(hueStart);
             mColorFilter.setHueEnd(hueEnd);
+
+            Point pos = mOverLay.getCursorPoint();
+            Rect  viewRect = mOverLay.getViewRect();
+            int color = mColorTransfar.getColor(data, mPreviewSize.width, mPreviewSize.height,
+                    mPreviewSize.width * pos.x / viewRect.right, mPreviewSize.height * pos.y / viewRect.bottom);
+            mColorInfoDrawer.setColorInfo(color);
 
             // 色の変換
             mColorTransfar.decodeYUV420SP(mImageData, data, mPreviewSize.width, mPreviewSize.height);

@@ -3,8 +3,6 @@ package snct.procon26.ziyuu.imageviewer;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -16,48 +14,20 @@ public class ImageViewer extends View {
     private Rect   mBitmapRect = null;
     private Rect   mViewRect   = new Rect(0, 0, 0, 0);
 
-    private int   mColorInfo;
-    private Point mCursorPos;
-    private float mCursorSize;
-    private Paint mBlackPaint;
-    private Paint mWhitePaint;
-    private Paint mFillWhitePaint;
-    private Paint mTextPaint;
+    private Point mCursorPos = new Point();
+    private ColorInfoDrawer mColorInfoDrawer = null;
 
     public ImageViewer(Context context) {
         super(context);
-        init();
     }
 
     public ImageViewer(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
     }
 
-    private void init() {
-        mCursorPos  = new Point();
-        mCursorSize = 20.0f;
-
-        mBlackPaint = new Paint();
-        mBlackPaint.setColor(Color.BLACK);
-        mBlackPaint.setStyle(Paint.Style.STROKE);
-        mBlackPaint.setStrokeWidth(3);
-
-        mWhitePaint = new Paint();
-        mWhitePaint.setColor(Color.WHITE);
-        mWhitePaint.setStyle(Paint.Style.STROKE);
-        mWhitePaint.setStrokeWidth(3);
-
-        mFillWhitePaint = new Paint();
-        mFillWhitePaint.setColor(Color.WHITE);
-        mFillWhitePaint.setStyle(Paint.Style.FILL_AND_STROKE);
-
-        mTextPaint = new Paint();
-        mTextPaint.setTextSize(30);
-    }
-
-    public void setColorInfo(int colorInfo) {
-        mColorInfo = colorInfo;
+    // セッター
+    public void setColorInfoDrawer(ColorInfoDrawer colorInfoDrawer) {
+        mColorInfoDrawer = colorInfoDrawer;
     }
 
     // ゲッター
@@ -85,18 +55,10 @@ public class ImageViewer extends View {
         if(mBitmap != null) {
             canvas.drawBitmap(mBitmap, mBitmapRect, mViewRect, null);
 
-            drawColorInfo(canvas);
+            if(mColorInfoDrawer != null) {
+                mColorInfoDrawer.drawColorInfo(canvas, mCursorPos);
+            }
         }
-    }
-
-    private void drawColorInfo(Canvas canvas) {
-        canvas.drawCircle(mCursorPos.x, mCursorPos.y, mCursorSize, mBlackPaint);
-        canvas.drawCircle(mCursorPos.x, mCursorPos.y, mCursorSize + mBlackPaint.getStrokeWidth(), mWhitePaint);
-
-        int rgb = mColorInfo;
-        String text = String.format("%d, %d, %d, %d", ((rgb >> 24) & 0xff), ((rgb >> 16) & 0xff), ((rgb >> 8) & 0xff), (rgb & 0xff));
-        canvas.drawRect(mCursorPos.x + 100, mCursorPos.y + 100 - 50, mCursorPos.x + 360, mCursorPos.y + 120, mFillWhitePaint);
-        canvas.drawText(text, mCursorPos.x + 100, mCursorPos.y + 100, mTextPaint);
     }
 
     @Override
