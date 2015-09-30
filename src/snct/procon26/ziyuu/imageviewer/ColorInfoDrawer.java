@@ -1,5 +1,6 @@
 package snct.procon26.ziyuu.imageviewer;
 
+import snct.procon26.ziyuu.colortransfar.ColorTransfar;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -58,17 +59,27 @@ public class ColorInfoDrawer {
         mRGB[0] = (mColorInfo >> 16) & 0xff;
         mRGB[1] = (mColorInfo >> 8)  & 0xff;
         mRGB[2] =  mColorInfo        & 0xff;
-        String text = String.format("%3d, %3d, %3d", mRGB[0], mRGB[1], mRGB[2]);
+        ColorTransfar.transRGBtoHSV(mRGB, mHSV);
+
+        String text = String.format("R:%03d H:%03d", mRGB[0], mHSV[0]);
         float  textWidth = mTextPaint.measureText(text);
 
         pt.x += mCursorSize;
-        canvas.drawRect(pt.x, pt.y, pt.x + textWidth, pt.y + height, mFillWhitePaint);
+        canvas.drawRect(pt.x, pt.y, pt.x + textWidth, pt.y + 4 * height, mFillWhitePaint);
+
+        text = String.format("色名:%s", "色名");
         canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
 
-//        ColorTransfar.transRGBtoHSV(mRGB, mHSV);
-//        text = String.format("%3d, %3d, %3d", mHSV[0], mHSV[1], mHSV[2]);
-//        textWidth = mTextPaint.measureText(text);
-//        canvas.drawRect(pt.x + 100, pt.y + 100 - 50 + 50, pt.x + 100 + textWidth, pt.y + 120 + 50, mFillWhitePaint);
-//        canvas.drawText(text, pt.x + 100, pt.y + 100 + 50, mTextPaint);
+        pt.y += height;
+        text = String.format("R:%3d H:%3d", mRGB[0], mHSV[0]);
+        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
+
+        pt.y += height;
+        text = String.format("G:%3d S:%3d", mRGB[1], mHSV[1]);
+        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
+
+        pt.y += height;
+        text = String.format("B:%3d V:%3d", mRGB[2], mHSV[2]);
+        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
     }
 }
