@@ -70,7 +70,7 @@ public class ColorInfoDrawer {
         canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + 4 * height + 2, mBlackPaint);
 
         String colorName = getColorName(mHSV);
-        text = String.format("色名:%s", colorName);
+        text = String.format("%s", colorName);
         canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
 
         pt.y += height;
@@ -94,25 +94,25 @@ public class ColorInfoDrawer {
 
     public String getColorName(int[] hsv) {
         if(hsv[0] < 30) {
-            return "赤";
+            return "赤色";
         }
         else if(hsv[0] < 90) {
-            return "黄";
+            return "黄色";
         }
         else if(hsv[0] < 150) {
-            return "緑";
+            return "緑色";
         }
         else if(hsv[0] < 210) {
             return "水色";
         }
         else if(hsv[0] < 270) {
-            return "青";
+            return "青色";
         }
         else if(hsv[0] < 330) {
-            return "紫";
+            return "紫色";
         }
         else {
-            return "赤";
+            return "赤色";
         }
     }
 }
