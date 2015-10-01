@@ -24,15 +24,22 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class ConfigColorFilterActivity extends Activity
         implements SurfaceHolder.Callback, Camera.PreviewCallback, View.OnClickListener {
     private static final String TAG = "ConfigColorFilterActivity";
 
-    private ColorTransfar      mColorTransfar;
-    private ColorValueTransfar mColorValueTransfar;
+    // 機能ON／OFFスイッチ
+    private Switch mAbleColorValueTransfarSwitch;
+
+    // 色変換クラス
+    private ColorTransfar      mColorTransfar      = new ColorTransfar();
+    private ColorValueTransfar mColorValueTransfar = new ColorValueTransfar();
 
     private SurfaceView mSvFacePreview;
     private SurfaceHolder mSurfaceHolder;
@@ -57,6 +64,20 @@ public class ConfigColorFilterActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config_colorfilter);
 
+        // 輝度の調節機能のON／OFFを設定する
+        mAbleColorValueTransfarSwitch = (Switch)findViewById(R.id.ableColorValueTransfarSwitch);
+        mAbleColorValueTransfarSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    mColorTransfar.setColorValueTransfar(mColorValueTransfar);
+                }
+                else {
+                    mColorTransfar.setColorValueTransfar(null);
+                }
+            }
+        });
+
         // SurfaceViewでカメラが利用できるように設定
         mSvFacePreview = (SurfaceView)findViewById(R.id.FacePreview);
         mSurfaceHolder = mSvFacePreview.getHolder();
@@ -74,6 +95,8 @@ public class ConfigColorFilterActivity extends Activity
         mRedColorBar.setProgress(red - mSeekBarOffset);
         mGreenColorBar.setProgress(green - mSeekBarOffset);
         mBlueColorBar.setProgress(blue - mSeekBarOffset);
+
+        mAbleColorValueTransfarSwitch.setChecked(mPref.getBoolean("isColorValueTransfarFunction", false));
 
         Button saveButton = (Button)findViewById(R.id.SaveButton);
         saveButton.setOnClickListener(this);
@@ -191,10 +214,6 @@ public class ConfigColorFilterActivity extends Activity
                         0, 0, mPreviewSize.width, mPreviewSize.height);
                 mOverLay.setBitmap(mBitmap);
 
-                // 色変換クラスの用意
-                mColorValueTransfar = new ColorValueTransfar();
-                mColorTransfar      = new ColorTransfar(mColorValueTransfar);
-
                 // フレームバッファを追加
                 mCamera.setPreviewCallbackWithBuffer(this);
                 mCamera.addCallbackBuffer(mFrameBuffer);
@@ -233,12 +252,14 @@ public class ConfigColorFilterActivity extends Activity
         int red   = mRedColorBar.getProgress()   + mSeekBarOffset;
         int green = mGreenColorBar.getProgress() + mSeekBarOffset;
         int blue  = mBlueColorBar.getProgress()  + mSeekBarOffset;
+        boolean isColorValueTransfarFunction = mAbleColorValueTransfarSwitch.isChecked();
 
         Editor editor = mPref.edit();
 
         editor.putInt("redColor", red);
         editor.putInt("greenColor", green);
         editor.putInt("blueColor", blue);
+        editor.putBoolean("isColorValueTransfarFunction", isColorValueTransfarFunction);
         editor.commit();
 
         surfaceDestroyed(mSurfaceHolder);
