@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
+import android.graphics.Path;
 import android.graphics.Point;
 
 public class ColorInfoDrawer {
@@ -73,12 +74,33 @@ public class ColorInfoDrawer {
         text = String.format("%s", colorName);
         canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
 
-        Point pivot = new Point(pt.x + 100, pt.y + (int)height + 100);
+        int size = 100;
+        Point pivot = new Point(pt.x + size, pt.y + (int)height + size);
+        drawColorChart(canvas, pivot, size);
         canvas.drawCircle(pivot.x, pivot.y, mCursorSize, mBlackPaint);
 
-        pivot.x += (mRGB[1] - mRGB[2]) * 1732 / 2000;
-        pivot.y += -mRGB[0] + (mRGB[1] + mRGB[2]) / 2;
+        pivot.x += (mRGB[1] - mRGB[2]) * 1732 * size / (2000 * 255);
+        pivot.y += (-mRGB[0] + (mRGB[1] + mRGB[2]) / 2) * size / 255;
         canvas.drawCircle(pivot.x, pivot.y, mCursorSize, mBlackPaint);
+    }
+
+    public void drawColorChart(Canvas canvas, Point pivot, int size) {
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        Path path = new Path();
+        path.moveTo(pivot.x, pivot.y - size);       // 赤
+
+        int halfWidth  = size * 1732 / 2000;
+        int halfHeight = size / 2;
+        path.lineTo(pivot.x + halfWidth, pivot.y - halfHeight);     // 黄色
+        path.lineTo(pivot.x + halfWidth, pivot.y + halfHeight);     // 緑
+        path.lineTo(pivot.x, pivot.y + size);                       // 水色
+        path.lineTo(pivot.x - halfWidth, pivot.y + halfHeight);     // 青
+        path.lineTo(pivot.x - halfWidth, pivot.y - halfHeight);     // 紫
+
+        canvas.drawPath(path, paint);
     }
 
     public String getColorName(int[] hsv) {
