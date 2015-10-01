@@ -57,25 +57,25 @@ public class ColorInfoDrawer {
         FontMetrics fontMetrics = mTextPaint.getFontMetrics();
         float height = -fontMetrics.top + fontMetrics.bottom;
 
+        int size = 100;
+        int width  = 2 * size * 1732 / 2000;
+
         mRGB[0] = (mColorInfo >> 16) & 0xff;
         mRGB[1] = (mColorInfo >> 8)  & 0xff;
         mRGB[2] =  mColorInfo        & 0xff;
         ColorTransfar.transRGBtoHSV(mRGB, mHSV);
 
-        String text = String.format("R:%03d H:%03d", mRGB[0], mHSV[0]);
+        String text = getColorName(mHSV);
         float  textWidth = mTextPaint.measureText(text);
 
         pt.x += mCursorSize;
         pt.y += mCursorSize;
-        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + height + 2, mFillWhitePaint);
-        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + height + 2, mBlackPaint);
+        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + width + 2, pt.y + height + 2, mFillWhitePaint);
+        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + width + 2, pt.y + height + 2, mBlackPaint);
 
-        String colorName = getColorName(mHSV);
-        text = String.format("%s", colorName);
-        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
+        canvas.drawText(text, pt.x + (width - textWidth) / 2, pt.y - fontMetrics.top, mTextPaint);
 
-        int size = 100;
-        Point pivot = new Point(pt.x + size, pt.y + (int)height + size);
+        Point pivot = new Point(pt.x + width / 2, pt.y + (int)height + size + 3);
         drawColorChart(canvas, pivot, size);
 
         Paint paint = new Paint();
