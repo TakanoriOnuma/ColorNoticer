@@ -45,7 +45,7 @@ public class ConfigColorFilterActivity extends Activity
     private Bitmap mBitmap;
     private ImageViewer mOverLay;
 
-    private SeekBar mAlphaColorBar;
+    private final int mSeekBarOffset = 50;
     private SeekBar mRedColorBar;
     private SeekBar mGreenColorBar;
     private SeekBar mBlueColorBar;
@@ -62,21 +62,18 @@ public class ConfigColorFilterActivity extends Activity
         mSurfaceHolder = mSvFacePreview.getHolder();
         mSurfaceHolder.addCallback(this);
 
-        mAlphaColorBar = (SeekBar)findViewById(R.id.AlphaColorBar);
         mRedColorBar   = (SeekBar)findViewById(R.id.RedColorBar);
         mGreenColorBar = (SeekBar)findViewById(R.id.GreenColorBar);
         mBlueColorBar  = (SeekBar)findViewById(R.id.BlueColorBar);
 
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        int alpha = mPref.getInt("alphaColor", 0);
-        int red   = mPref.getInt("redColor", 0);
-        int green = mPref.getInt("greenColor", 0);
-        int blue  = mPref.getInt("blueColor", 0);
+        int red   = mPref.getInt("redColor", mSeekBarOffset);
+        int green = mPref.getInt("greenColor", mSeekBarOffset);
+        int blue  = mPref.getInt("blueColor", mSeekBarOffset);
 
-        mAlphaColorBar.setProgress(alpha);
-        mRedColorBar.setProgress(red);
-        mGreenColorBar.setProgress(green);
-        mBlueColorBar.setProgress(blue);
+        mRedColorBar.setProgress(red - mSeekBarOffset);
+        mGreenColorBar.setProgress(green - mSeekBarOffset);
+        mBlueColorBar.setProgress(blue - mSeekBarOffset);
 
         Button saveButton = (Button)findViewById(R.id.SaveButton);
         saveButton.setOnClickListener(this);
@@ -124,11 +121,10 @@ public class ConfigColorFilterActivity extends Activity
     public void onPreviewFrame(byte[] data, Camera camera) {
         if(mCamera != null) {
             TextView colorProperties = (TextView)findViewById(R.id.ColorProperties);
-            int alpha = mAlphaColorBar.getProgress() & 0xff;
-            int red   = mRedColorBar.getProgress()   & 0xff;
-            int green = mGreenColorBar.getProgress() & 0xff;
-            int blue  = mBlueColorBar.getProgress()  & 0xff;
-            colorProperties.setText(String.format("%d, %d, %d, %d", alpha, red, green, blue));
+            int red   = mRedColorBar.getProgress()   + mSeekBarOffset;
+            int green = mGreenColorBar.getProgress() + mSeekBarOffset;
+            int blue  = mBlueColorBar.getProgress()  + mSeekBarOffset;
+            colorProperties.setText(String.format("%d, %d, %d", red, green, blue));
 
             mColorValueTransfar.setRedRate(red);
             mColorValueTransfar.setGreenRate(green);
@@ -234,14 +230,12 @@ public class ConfigColorFilterActivity extends Activity
     @Override
     public void onClick(View v) {
         // 設定を保存して終了する
-        int alpha = mAlphaColorBar.getProgress();
-        int red   = mRedColorBar.getProgress();
-        int green = mGreenColorBar.getProgress();
-        int blue  = mBlueColorBar.getProgress();
+        int red   = mRedColorBar.getProgress()   + mSeekBarOffset;
+        int green = mGreenColorBar.getProgress() + mSeekBarOffset;
+        int blue  = mBlueColorBar.getProgress()  + mSeekBarOffset;
 
         Editor editor = mPref.edit();
 
-        editor.putInt("alphaColor", alpha);
         editor.putInt("redColor", red);
         editor.putInt("greenColor", green);
         editor.putInt("blueColor", blue);

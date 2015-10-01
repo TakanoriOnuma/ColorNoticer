@@ -18,21 +18,36 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="透過率" />
-            <SeekBar
-                android:id="@+id/AlphaColorBar"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:max="255" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="赤" />
             <SeekBar
                 android:id="@+id/RedColorBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:max="255" />
+                android:max="100" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="50%" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="100%" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="150%" />
+            </LinearLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +56,31 @@
                 android:id="@+id/GreenColorBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:max="255" />
+                android:max="100" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="50%" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="100%" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="150%" />
+            </LinearLayout>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -50,19 +89,42 @@
                 android:id="@+id/BlueColorBar"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:max="255" />
-
-            <TextView
-                android:id="@+id/ColorProperties"
-                android:layout_width="fill_parent"
+                android:max="100" />
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="" />
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="50%" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="100%" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="150%" />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/SaveButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="保存" />
+
+            <TextView
+                android:id="@+id/ColorProperties"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="" />
         </LinearLayout>
     </FrameLayout>
 
