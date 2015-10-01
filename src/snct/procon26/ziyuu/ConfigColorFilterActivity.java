@@ -75,6 +75,9 @@ public class ConfigColorFilterActivity extends Activity
                 else {
                     mColorTransfar.setColorValueTransfar(null);
                 }
+                mRedColorBar.setEnabled(isChecked);
+                mGreenColorBar.setEnabled(isChecked);
+                mBlueColorBar.setEnabled(isChecked);
             }
         });
 
@@ -86,6 +89,9 @@ public class ConfigColorFilterActivity extends Activity
         mRedColorBar   = (SeekBar)findViewById(R.id.RedColorBar);
         mGreenColorBar = (SeekBar)findViewById(R.id.GreenColorBar);
         mBlueColorBar  = (SeekBar)findViewById(R.id.BlueColorBar);
+        mRedColorBar.setEnabled(false);
+        mGreenColorBar.setEnabled(false);
+        mBlueColorBar.setEnabled(false);
 
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
         int red   = mPref.getInt("redColor", mSeekBarOffset);
