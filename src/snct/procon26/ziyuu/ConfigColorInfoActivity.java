@@ -1,6 +1,7 @@
 package snct.procon26.ziyuu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.sendai.national.college.of.technology.R;
@@ -27,15 +28,21 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class ConfigColorInfoActivity extends Activity
         implements SurfaceHolder.Callback, Camera.PreviewCallback, View.OnClickListener {
     private static final String TAG = "ConfigColorInfoActivity";
 
-    private ColorTransfar mColorTransfar;
-    private ColorFilter   mColorFilter;
+    private Switch mAbleFlashingSwitch;
+    private Switch mAbleColorInfoSwitch;
+
+    private ColorTransfar mColorTransfar = new ColorTransfar();
+    private ColorFilter   mColorFilter   = new ColorFilter();
 
     private SurfaceView mSvFacePreview;
     private SurfaceHolder mSurfaceHolder;
@@ -47,8 +54,9 @@ public class ConfigColorInfoActivity extends Activity
     private int[]  mImageData;
     private Bitmap mBitmap;
     private ImageViewer mOverLay;
-    private ColorInfoDrawer mColorInfoDrawer;
+    private ColorInfoDrawer mColorInfoDrawer = new ColorInfoDrawer();
 
+    private ArrayList<Button> mSelectColorButtons = new ArrayList<Button>();
     private SeekBar mSaturationBar;
     private SeekBar mHueStartBar;
     private SeekBar mHueEndBar;
@@ -60,6 +68,36 @@ public class ConfigColorInfoActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config_colorinfo);
 
+        mOverLay = (ImageViewer)findViewById(R.id.OverLayView);
+
+        // 点滅機能のON／OFFを作成する
+        mAbleFlashingSwitch = (Switch)findViewById(R.id.ableFlashingSwitch);
+        mAbleFlashingSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    mColorTransfar.setColorFilter(mColorFilter);
+                }
+                else {
+                    mColorTransfar.setColorFilter(null);
+                }
+            }
+        });
+
+        // 色情報表示機能のON／OFFを作成する
+        mAbleColorInfoSwitch = (Switch)findViewById(R.id.ableColorInfoSwitch);
+        mAbleColorInfoSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    mOverLay.setColorInfoDrawer(mColorInfoDrawer);
+                }
+                else {
+                    mOverLay.setColorInfoDrawer(null);
+                }
+            }
+        });
+
         // SurfaceViewでカメラが利用できるように設定
         mSvFacePreview = (SurfaceView)findViewById(R.id.FacePreview);
         mSurfaceHolder = mSvFacePreview.getHolder();
@@ -69,6 +107,7 @@ public class ConfigColorInfoActivity extends Activity
         mHueStartBar   = (SeekBar)findViewById(R.id.HueStartBar);
         mHueEndBar     = (SeekBar)findViewById(R.id.HueEndBar);
 
+        // パラメータの読み込みと設定
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
         int saturation = mPref.getInt("saturation", 0);
         int hueStart   = mPref.getInt("hueStart", 0);
@@ -78,12 +117,43 @@ public class ConfigColorInfoActivity extends Activity
         mHueStartBar.setProgress(hueStart);
         mHueEndBar.setProgress(hueEnd);
 
+        mAbleFlashingSwitch.setChecked(mPref.getBoolean("isFlashingFunction", false));
+        mAbleColorInfoSwitch.setChecked(mPref.getBoolean("isColorInfoFunction", false));
+
         Button saveButton = (Button)findViewById(R.id.SaveButton);
         saveButton.setOnClickListener(this);
 
-        mOverLay = (ImageViewer)findViewById(R.id.OverLayView);
-        mColorInfoDrawer = new ColorInfoDrawer();
-        mOverLay.setColorInfoDrawer(mColorInfoDrawer);
+        // 点滅色選択ボタンの初期化
+        mSelectColorButtons.add((Button)findViewById(R.id.RedButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.YellowButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.GreenButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.LightBlueButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.BlueButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.PurpleButton));
+        // 点滅色指定ボタンのリスナー
+        View.OnClickListener selectColorButtonListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 全てリセットする
+                for(Button button : mSelectColorButtons) {
+                    button.setBackgroundColor(0x00000000);
+                }
+
+                // クリックされたボタンだけ枠をつける
+                Button button = (Button)v;
+                button.setBackgroundResource(R.drawable.frame_border);
+
+                // 色相の範囲を変更する
+                int idx = mSelectColorButtons.indexOf(button);
+                int hueStart =  idx      * 360 / mSelectColorButtons.size();
+                int hueEnd   = (idx + 1) * 360 / mSelectColorButtons.size();
+                mHueStartBar.setProgress(hueStart);
+                mHueEndBar.setProgress(hueEnd);
+            }
+        };
+        for(Button button : mSelectColorButtons) {
+            button.setOnClickListener(selectColorButtonListener);
+        }
     }
 
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
@@ -135,6 +205,7 @@ public class ConfigColorInfoActivity extends Activity
             mColorFilter.setHueStart(hueStart);
             mColorFilter.setHueEnd(hueEnd);
 
+            // 色情報の取得
             Point pos = mOverLay.getCursorPoint();
             Rect  viewRect = mOverLay.getViewRect();
             int color = ColorTransfar.getColor(data, mPreviewSize.width, mPreviewSize.height,
@@ -204,10 +275,6 @@ public class ConfigColorInfoActivity extends Activity
                         0, 0, mPreviewSize.width, mPreviewSize.height);
                 mOverLay.setBitmap(mBitmap);
 
-                // 色変換クラスの用意
-                mColorFilter   = new ColorFilter();
-                mColorTransfar = new ColorTransfar(mColorFilter);
-
                 // フレームバッファを追加
                 mCamera.setPreviewCallbackWithBuffer(this);
                 mCamera.addCallbackBuffer(mFrameBuffer);
@@ -246,12 +313,16 @@ public class ConfigColorInfoActivity extends Activity
         int saturation = mSaturationBar.getProgress();
         int hueStart  = mHueStartBar.getProgress();
         int hueEnd = mHueEndBar.getProgress();
+        boolean isFlashingFunction  = mAbleFlashingSwitch.isChecked();
+        boolean isColorInfoFunction = mAbleColorInfoSwitch.isChecked();
 
         Editor editor = mPref.edit();
 
         editor.putInt("saturation", saturation);
         editor.putInt("hueStart", hueStart);
         editor.putInt("hueEnd", hueEnd);
+        editor.putBoolean("isFlashingFunction", isFlashingFunction);
+        editor.putBoolean("isColorInfoFunction", isColorInfoFunction);
         editor.commit();
 
         surfaceDestroyed(mSurfaceHolder);

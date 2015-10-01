@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.FontMetrics;
+import android.graphics.Path;
 import android.graphics.Point;
 
 public class ColorInfoDrawer {
@@ -56,40 +57,66 @@ public class ColorInfoDrawer {
         FontMetrics fontMetrics = mTextPaint.getFontMetrics();
         float height = -fontMetrics.top + fontMetrics.bottom;
 
+        int size = 100;
+        int width  = 2 * size * 1732 / 2000;
+
         mRGB[0] = (mColorInfo >> 16) & 0xff;
         mRGB[1] = (mColorInfo >> 8)  & 0xff;
         mRGB[2] =  mColorInfo        & 0xff;
         ColorTransfar.transRGBtoHSV(mRGB, mHSV);
 
-        String text = String.format("R:%03d H:%03d", mRGB[0], mHSV[0]);
+        String text = getColorName(mHSV);
         float  textWidth = mTextPaint.measureText(text);
 
         pt.x += mCursorSize;
         pt.y += mCursorSize;
-        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + 4 * height + 2, mFillWhitePaint);
-        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + 4 * height + 2, mBlackPaint);
+        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + width + 2, pt.y + height + 2, mFillWhitePaint);
+        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + width + 2, pt.y + height + 2, mBlackPaint);
 
-        String colorName = getColorName(mHSV);
-        text = String.format("%s", colorName);
-        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
+        canvas.drawText(text, pt.x + (width - textWidth) / 2, pt.y - fontMetrics.top, mTextPaint);
 
-        pt.y += height;
-        text = String.format("R:%3d", mRGB[0]);
-        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
-        text = String.format("H:%3d", mHSV[0]);
-        canvas.drawText(text, pt.x + textWidth / 2, pt.y - fontMetrics.top, mTextPaint);
+        Point pivot = new Point(pt.x + width / 2, pt.y + (int)height + size + 3);
+        drawColorChart(canvas, pivot, size);
 
-        pt.y += height;
-        text = String.format("G:%3d", mRGB[1]);
-        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
-        text = String.format("S:%3d", mHSV[1]);
-        canvas.drawText(text, pt.x + textWidth / 2, pt.y - fontMetrics.top, mTextPaint);
+        Paint paint = new Paint();
+        paint.setColor(Color.rgb(mRGB[0], mRGB[1], mRGB[2]));
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        pivot.x += (mRGB[1] - mRGB[2]) * 1732 * size / (2000 * 255);
+        pivot.y += (-mRGB[0] + (mRGB[1] + mRGB[2]) / 2) * size / 255;
+        canvas.drawCircle(pivot.x, pivot.y, mCursorSize / 2, paint);
+    }
 
-        pt.y += height;
-        text = String.format("B:%3d", mRGB[2]);
-        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
-        text = String.format("V:%3d", mHSV[2]);
-        canvas.drawText(text, pt.x + textWidth / 2, pt.y - fontMetrics.top, mTextPaint);
+    private void drawColorChart(Canvas canvas, Point pivot, int size) {
+        Paint paint = new Paint();
+        paint.setColor(0x77ffffff);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        Path path = new Path();
+        path.moveTo(pivot.x, pivot.y - size);       // 赤
+
+        int halfWidth  = size * 1732 / 2000;
+        int halfHeight = size / 2;
+        path.lineTo(pivot.x + halfWidth, pivot.y - halfHeight);     // 黄色
+        path.lineTo(pivot.x + halfWidth, pivot.y + halfHeight);     // 緑
+        path.lineTo(pivot.x, pivot.y + size);                       // 水色
+        path.lineTo(pivot.x - halfWidth, pivot.y + halfHeight);     // 青
+        path.lineTo(pivot.x - halfWidth, pivot.y - halfHeight);     // 紫
+
+        canvas.drawPath(path, paint);
+
+        // 矢印の描画
+        Paint arrowPaint = new Paint();
+        arrowPaint.setStrokeWidth(3);
+        arrowPaint.setColor(Color.RED);
+        drawArrow(canvas, pivot, new Point(pivot.x, pivot.y - size), arrowPaint);
+        arrowPaint.setColor(Color.GREEN);
+        drawArrow(canvas, pivot, new Point(pivot.x + halfWidth, pivot.y + halfHeight), arrowPaint);
+        arrowPaint.setColor(Color.BLUE);
+        drawArrow(canvas, pivot, new Point(pivot.x - halfWidth, pivot.y + halfHeight), arrowPaint);
+    }
+
+    private void drawArrow(Canvas canvas, Point startPt, Point endPt, Paint paint) {
+        canvas.drawLine(startPt.x, startPt.y, endPt.x, endPt.y, paint);
     }
 
     public String getColorName(int[] hsv) {

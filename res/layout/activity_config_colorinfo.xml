@@ -15,6 +15,135 @@
             android:orientation="vertical"
             android:gravity="top">
 
+            <Switch
+                android:id="@+id/ableColorInfoSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="色情報表示機能" />
+
+            <Switch
+                android:id="@+id/ableFlashingSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="点滅機能" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点滅色の選択" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="left">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#ff0000" />
+                    <Button
+                        android:id="@+id/RedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="赤" />
+                </FrameLayout>
+
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#ffff00" />
+                    <Button
+                        android:id="@+id/YellowButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="黄" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00ff00" />
+                    <Button
+                        android:id="@+id/GreenButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="緑" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00ffff" />
+                    <Button
+                        android:id="@+id/LightBlueButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:text="水" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#0000ff" />
+                    <Button
+                        android:id="@+id/BlueButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:textColor="#ffffff"
+                        android:text="青" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#ff00ff" />
+                    <Button
+                        android:id="@+id/PurpleButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="#00000000"
+                        android:textColor="#ffffff"
+                        android:text="紫" />
+                </FrameLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/SaveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="保存" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -42,18 +171,11 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:max="360" />
-
             <TextView
                 android:id="@+id/ColorProperties"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="" />
-
-            <Button
-                android:id="@+id/SaveButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="保存" />
         </LinearLayout>
     </FrameLayout>
 
