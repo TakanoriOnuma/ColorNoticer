@@ -66,30 +66,19 @@ public class ColorInfoDrawer {
 
         pt.x += mCursorSize;
         pt.y += mCursorSize;
-        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + 4 * height + 2, mFillWhitePaint);
-        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + 4 * height + 2, mBlackPaint);
+        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + height + 2, mFillWhitePaint);
+        canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + textWidth + 2, pt.y + height + 2, mBlackPaint);
 
         String colorName = getColorName(mHSV);
         text = String.format("%s", colorName);
         canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
 
-        pt.y += height;
-        text = String.format("R:%3d", mRGB[0]);
-        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
-        text = String.format("H:%3d", mHSV[0]);
-        canvas.drawText(text, pt.x + textWidth / 2, pt.y - fontMetrics.top, mTextPaint);
+        Point pivot = new Point(pt.x + 100, pt.y + (int)height + 100);
+        canvas.drawCircle(pivot.x, pivot.y, mCursorSize, mBlackPaint);
 
-        pt.y += height;
-        text = String.format("G:%3d", mRGB[1]);
-        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
-        text = String.format("S:%3d", mHSV[1]);
-        canvas.drawText(text, pt.x + textWidth / 2, pt.y - fontMetrics.top, mTextPaint);
-
-        pt.y += height;
-        text = String.format("B:%3d", mRGB[2]);
-        canvas.drawText(text, pt.x, pt.y - fontMetrics.top, mTextPaint);
-        text = String.format("V:%3d", mHSV[2]);
-        canvas.drawText(text, pt.x + textWidth / 2, pt.y - fontMetrics.top, mTextPaint);
+        pivot.x += (mRGB[1] - mRGB[2]) * 1732 / 2000;
+        pivot.y += -mRGB[0] + (mRGB[1] + mRGB[2]) / 2;
+        canvas.drawCircle(pivot.x, pivot.y, mCursorSize, mBlackPaint);
     }
 
     public String getColorName(int[] hsv) {
