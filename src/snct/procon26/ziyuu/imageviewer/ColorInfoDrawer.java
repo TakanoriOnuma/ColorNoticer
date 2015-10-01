@@ -77,16 +77,18 @@ public class ColorInfoDrawer {
         int size = 100;
         Point pivot = new Point(pt.x + size, pt.y + (int)height + size);
         drawColorChart(canvas, pivot, size);
-        canvas.drawCircle(pivot.x, pivot.y, mCursorSize, mBlackPaint);
 
+        Paint paint = new Paint();
+        paint.setColor(Color.rgb(mRGB[0], mRGB[1], mRGB[2]));
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
         pivot.x += (mRGB[1] - mRGB[2]) * 1732 * size / (2000 * 255);
         pivot.y += (-mRGB[0] + (mRGB[1] + mRGB[2]) / 2) * size / 255;
-        canvas.drawCircle(pivot.x, pivot.y, mCursorSize, mBlackPaint);
+        canvas.drawCircle(pivot.x, pivot.y, mCursorSize / 2, paint);
     }
 
-    public void drawColorChart(Canvas canvas, Point pivot, int size) {
+    private void drawColorChart(Canvas canvas, Point pivot, int size) {
         Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
+        paint.setColor(0x77ffffff);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         Path path = new Path();
@@ -101,6 +103,20 @@ public class ColorInfoDrawer {
         path.lineTo(pivot.x - halfWidth, pivot.y - halfHeight);     // 紫
 
         canvas.drawPath(path, paint);
+
+        // 矢印の描画
+        Paint arrowPaint = new Paint();
+        arrowPaint.setStrokeWidth(3);
+        arrowPaint.setColor(Color.RED);
+        drawArrow(canvas, pivot, new Point(pivot.x, pivot.y - size), arrowPaint);
+        arrowPaint.setColor(Color.GREEN);
+        drawArrow(canvas, pivot, new Point(pivot.x + halfWidth, pivot.y + halfHeight), arrowPaint);
+        arrowPaint.setColor(Color.BLUE);
+        drawArrow(canvas, pivot, new Point(pivot.x - halfWidth, pivot.y + halfHeight), arrowPaint);
+    }
+
+    private void drawArrow(Canvas canvas, Point startPt, Point endPt, Paint paint) {
+        canvas.drawLine(startPt.x, startPt.y, endPt.x, endPt.y, paint);
     }
 
     public String getColorName(int[] hsv) {
