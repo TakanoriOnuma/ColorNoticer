@@ -97,8 +97,21 @@ public class ConfigColorInfoActivity extends Activity
         View.OnClickListener selectColorButtonListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // 全てリセットする
+                for(Button button : mSelectColorButtons) {
+                    button.setBackgroundColor(0x00000000);
+                }
+
+                // クリックされたボタンだけ枠をつける
                 Button button = (Button)v;
                 button.setBackgroundResource(R.drawable.frame_border);
+
+                // 色相の範囲を変更する
+                int idx = mSelectColorButtons.indexOf(button);
+                int hueStart =  idx      * 360 / mSelectColorButtons.size();
+                int hueEnd   = (idx + 1) * 360 / mSelectColorButtons.size();
+                mHueStartBar.setProgress(hueStart);
+                mHueEndBar.setProgress(hueEnd);
             }
         };
         for(Button button : mSelectColorButtons) {
