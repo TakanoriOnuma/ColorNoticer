@@ -54,10 +54,12 @@ public class ColorTransfar {
                 rgb[2] = y1192 + 2066 * u;
 
                 if(mColorFilter != null) {
-                    // マスクする必要があるなら、黒にして次へ
+                    // マスクする必要があるなら、半透明のマスクをかける
+                    // （1bitシフトでalpha=0.5の黒マスクになる）
                     if(mColorFilter.isMask(rgb[0], rgb[1], rgb[2], mFrameNum, mPeriodFrameNum)) {
-                        rgbs[yp] = 0xff000000;
-                        continue;
+                        rgb[0] >>= 1;
+                        rgb[1] >>= 1;
+                        rgb[2] >>= 1;
                     }
                 }
                 if(mColorValueTransfar != null) {
