@@ -84,6 +84,15 @@ public class ConfigColorInfoActivity extends Activity
         mOverLay = (ImageViewer)findViewById(R.id.OverLayView);
         mColorInfoDrawer = new ColorInfoDrawer();
         mOverLay.setColorInfoDrawer(mColorInfoDrawer);
+
+        Button button = (Button)findViewById(R.id.RedButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button button = (Button)v;
+                button.setBackgroundResource(R.drawable.frame_border);
+            }
+        });
     }
 
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
@@ -135,6 +144,7 @@ public class ConfigColorInfoActivity extends Activity
             mColorFilter.setHueStart(hueStart);
             mColorFilter.setHueEnd(hueEnd);
 
+            // 色情報の取得
             Point pos = mOverLay.getCursorPoint();
             Rect  viewRect = mOverLay.getViewRect();
             int color = ColorTransfar.getColor(data, mPreviewSize.width, mPreviewSize.height,
