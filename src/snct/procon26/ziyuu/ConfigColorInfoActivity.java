@@ -28,12 +28,18 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 public class ConfigColorInfoActivity extends Activity
         implements SurfaceHolder.Callback, Camera.PreviewCallback, View.OnClickListener {
     private static final String TAG = "ConfigColorInfoActivity";
+
+    private Switch mAbleFlashingSwitch;
+    private Switch mAbleColorInfoSwitch;
 
     private ColorTransfar mColorTransfar;
     private ColorFilter   mColorFilter;
@@ -61,6 +67,34 @@ public class ConfigColorInfoActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config_colorinfo);
+
+        // 点滅機能のON／OFFを作成する
+        mAbleFlashingSwitch = (Switch)findViewById(R.id.ableFlashingSwitch);
+        mAbleFlashingSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    mColorTransfar.setColorFilter(mColorFilter);
+                }
+                else {
+                    mColorTransfar.setColorFilter(null);
+                }
+            }
+        });
+
+        // 色情報表示機能のON／OFFを作成する
+        mAbleColorInfoSwitch = (Switch)findViewById(R.id.ableColorInfoSwitch);
+        mAbleColorInfoSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    mOverLay.setColorInfoDrawer(mColorInfoDrawer);
+                }
+                else {
+                    mOverLay.setColorInfoDrawer(null);
+                }
+            }
+        });
 
         // SurfaceViewでカメラが利用できるように設定
         mSvFacePreview = (SurfaceView)findViewById(R.id.FacePreview);
@@ -239,8 +273,13 @@ public class ConfigColorInfoActivity extends Activity
                 mOverLay.setBitmap(mBitmap);
 
                 // 色変換クラスの用意
+                mColorTransfar = new ColorTransfar();
                 mColorFilter   = new ColorFilter();
-                mColorTransfar = new ColorTransfar(mColorFilter);
+
+                // 機能を有効化しているならフィルタをセットする
+                if(mAbleFlashingSwitch.isChecked()) {
+                    mColorTransfar.setColorFilter(mColorFilter);
+                }
 
                 // フレームバッファを追加
                 mCamera.setPreviewCallbackWithBuffer(this);
