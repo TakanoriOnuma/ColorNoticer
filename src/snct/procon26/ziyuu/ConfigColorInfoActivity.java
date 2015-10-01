@@ -1,6 +1,7 @@
 package snct.procon26.ziyuu;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.co.sendai.national.college.of.technology.R;
@@ -49,6 +50,7 @@ public class ConfigColorInfoActivity extends Activity
     private ImageViewer mOverLay;
     private ColorInfoDrawer mColorInfoDrawer;
 
+    private ArrayList<Button> mSelectColorButtons = new ArrayList<Button>();
     private SeekBar mSaturationBar;
     private SeekBar mHueStartBar;
     private SeekBar mHueEndBar;
@@ -85,14 +87,23 @@ public class ConfigColorInfoActivity extends Activity
         mColorInfoDrawer = new ColorInfoDrawer();
         mOverLay.setColorInfoDrawer(mColorInfoDrawer);
 
-        Button button = (Button)findViewById(R.id.RedButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        mSelectColorButtons.add((Button)findViewById(R.id.RedButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.YellowButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.GreenButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.LightBlueButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.BlueButton));
+        mSelectColorButtons.add((Button)findViewById(R.id.PurpleButton));
+        // 点滅色指定ボタンのリスナー
+        View.OnClickListener selectColorButtonListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Button button = (Button)v;
                 button.setBackgroundResource(R.drawable.frame_border);
             }
-        });
+        };
+        for(Button button : mSelectColorButtons) {
+            button.setOnClickListener(selectColorButtonListener);
+        }
     }
 
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
