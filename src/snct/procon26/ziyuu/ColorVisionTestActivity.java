@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RadioGroup;
 
 public class ColorVisionTestActivity extends Activity {
@@ -22,6 +24,12 @@ public class ColorVisionTestActivity extends Activity {
         mSelectNumGroup = (RadioGroup)findViewById(R.id.selectNumGroup);
 
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // MOVERIOのフルスクリーン設定
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        winParams.flags |= 0x80000000;
+        win.setAttributes(winParams);
     }
 
     @Override

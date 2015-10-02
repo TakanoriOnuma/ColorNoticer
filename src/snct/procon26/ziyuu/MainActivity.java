@@ -34,6 +34,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -89,6 +91,12 @@ public class MainActivity extends ActionBarActivity
 
         // リファレンスマネージャの取得
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // MOVERIOのフルスクリーン設定
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        winParams.flags |= 0x80000000;
+        win.setAttributes(winParams);
     }
 
     @Override
