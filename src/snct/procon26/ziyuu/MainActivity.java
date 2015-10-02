@@ -3,7 +3,6 @@ package snct.procon26.ziyuu;
 import java.io.IOException;
 import java.util.List;
 
-import jp.co.sendai.national.college.of.technology.R;
 import snct.procon26.ziyuu.colortransfar.ColorFilter;
 import snct.procon26.ziyuu.colortransfar.ColorTransfar;
 import snct.procon26.ziyuu.colortransfar.ColorValueTransfar;
