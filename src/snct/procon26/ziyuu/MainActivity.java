@@ -111,7 +111,7 @@ public class MainActivity extends ActionBarActivity
         Intent intent;
         switch (number) {
         case 1:
-            intent = new Intent(MainActivity.this, ConfigColorFilterActivity.class);
+            intent = new Intent(MainActivity.this, ColorVisionTestActivity.class);
             break;
         case 2:
             intent = new Intent(MainActivity.this, ConfigColorFilterActivity.class);
