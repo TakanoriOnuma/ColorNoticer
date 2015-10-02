@@ -5,9 +5,12 @@
     <string name="title_section1">色覚検査</string>
     <string name="title_section2">色変換の設定</string>
     <string name="title_section3">色情報表示の設定</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!-- not use property
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
-
+    -->
 </resources>
