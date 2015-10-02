@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="jp.co.sendai.national.college.of.technology.MainActivity" >
 
+    <!--
     <item
         android:id="@+id/action_example"
         android:title="@string/action_example"
@@ -12,5 +13,6 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
+    -->
 
 </menu>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="jp.co.sendai.national.college.of.technology"
+    package="snct.procon26.ziyuu"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -24,11 +24,11 @@
             </intent-filter>
         </activity>
         <activity android:name="snct.procon26.ziyuu.ConfigColorFilterActivity"
-            android:label="@string/app_name"
+            android:label="@string/title_section2"
             android:screenOrientation="landscape">
         </activity>
         <activity android:name="snct.procon26.ziyuu.ConfigColorInfoActivity"
-            android:label="@string/app_name"
+            android:label="@string/title_section3"
             android:screenOrientation="landscape">
         </activity>
     </application>
