@@ -21,12 +21,10 @@
                 android:text="星は何個ありますか？" />
 
             <RadioGroup
+                android:id="@+id/selectNumGroup"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TableRow
-                    android:id="@+id/tableRow1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                     <RadioButton
                         android:id="@+id/radioButton1"
                         android:layout_width="wrap_content"
@@ -37,12 +35,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="5個" />
-                </TableRow>
-
-                <TableRow
-                    android:id="@+id/tableRow2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
                     <RadioButton
                         android:id="@+id/radioButton3"
                         android:layout_width="wrap_content"
@@ -53,7 +45,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="7個" />
-                </TableRow>
             </RadioGroup>
 
             <Space
@@ -68,11 +59,8 @@
 
             <RadioGroup
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TableRow
-                    android:id="@+id/tableRow3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                     <RadioButton
                         android:id="@+id/radioButton5"
                         android:layout_width="wrap_content"
@@ -83,7 +71,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="いいえ" />
-                </TableRow>
             </RadioGroup>
 
             <Button
