@@ -24,11 +24,11 @@
             </intent-filter>
         </activity>
         <activity android:name="snct.procon26.ziyuu.ConfigColorFilterActivity"
-            android:label="@string/app_name"
+            android:label="@string/title_section2"
             android:screenOrientation="landscape">
         </activity>
         <activity android:name="snct.procon26.ziyuu.ConfigColorInfoActivity"
-            android:label="@string/app_name"
+            android:label="@string/title_section3"
             android:screenOrientation="landscape">
         </activity>
     </application>
