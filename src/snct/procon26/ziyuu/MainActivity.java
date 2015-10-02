@@ -34,7 +34,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
@@ -108,30 +107,25 @@ public class MainActivity extends ActionBarActivity
             return;
         }
 
+        // 次のアクティビティをセットする
         Intent intent;
         switch (number) {
         case 1:
-            mTitle = getString(R.string.title_section1);
-            surfaceDestroyed(mSurfaceHolder);
-
             intent = new Intent(MainActivity.this, ConfigColorFilterActivity.class);
-            startActivity(intent);
             break;
         case 2:
-            mTitle = getString(R.string.title_section2);
-            surfaceDestroyed(mSurfaceHolder);
-
             intent = new Intent(MainActivity.this, ConfigColorFilterActivity.class);
-            startActivity(intent);
             break;
         case 3:
-            mTitle = getString(R.string.title_section3);
-            surfaceDestroyed(mSurfaceHolder);
-
             intent = new Intent(MainActivity.this, ConfigColorInfoActivity.class);
-            startActivity(intent);
             break;
+        default:
+            return;
         }
+
+        // Viewを破棄して次のアクティビティに移る
+        surfaceDestroyed(mSurfaceHolder);
+        startActivity(intent);
     }
 
     public void restoreActionBar() {
