@@ -45,6 +45,7 @@ public class MainActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
+    private boolean mIsFirstLaunch = true;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -102,13 +103,22 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void onSectionAttached(int number) {
+        // 起動時から選択されるので初回のみはアクティビティ遷移を回避する
+        if(mIsFirstLaunch) {
+            mIsFirstLaunch = false;
+            return;
+        }
+
         Intent intent;
         switch (number) {
         case 1:
             mTitle = getString(R.string.title_section1);
+            surfaceDestroyed(mSurfaceHolder);
+
+            intent = new Intent(MainActivity.this, ConfigColorFilterActivity.class);
+            startActivity(intent);
             break;
         case 2:
-            // 応急処置の切り替え（実際は別なところからやると思う）
             mTitle = getString(R.string.title_section2);
             surfaceDestroyed(mSurfaceHolder);
 
