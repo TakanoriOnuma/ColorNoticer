@@ -68,6 +68,14 @@ public class ColorInfoDrawer {
         String text = getColorName(mHSV);
         float  textWidth = mTextPaint.measureText(text);
 
+        // チャート描くためにスケールを大きくする
+        mRGB[0] <<= 1;
+        mRGB[1] <<= 1;
+        mRGB[2] <<= 1;
+        mRGB[0] = (mRGB[0] < 255) ? mRGB[0] : 255;
+        mRGB[1] = (mRGB[1] < 255) ? mRGB[1] : 255;
+        mRGB[2] = (mRGB[2] < 255) ? mRGB[2] : 255;
+
         pt.x += mCursorSize;
         pt.y += mCursorSize;
         canvas.drawRect(pt.x - 2, pt.y - 2, pt.x + width + 2, pt.y + height + 2, mFillWhitePaint);
