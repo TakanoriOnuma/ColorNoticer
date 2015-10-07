@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -104,12 +104,74 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
         mQuestionNumber += 1;
         // 3問目を超えたら色覚検査を終了する
         if(mQuestionNumber >= 3) {
-            Log.d("debug", mResults[0] + ", " + mResults[1] + ", " + mResults[2]);
+            setConfig();
             finish();
             return;
         }
 
         mImageView.setImageResource(mQuestionImageIds[mQuestionNumber]);
+    }
+
+    // 画像処理を設定する
+    private void setConfig() {
+        Editor editor = mPref.edit();
+        // 赤色弱かチェック
+        if(mResults[0] > 0) {
+            // 軽度かチェック
+            if(mResults[0] <= 1) {
+                editor.putBoolean("isColorValueTransfarFunction", true);
+                editor.putInt("redColor", 120);
+                editor.putInt("greenColor", 100);
+                editor.putInt("blueColor", 100);
+            }
+            else {
+                editor.putBoolean("isColorInfoFunction", true);
+                editor.putBoolean("isFlashingFunction", true);
+                editor.putInt("saturation", 20);
+                editor.putInt("hueStart", 0);
+                editor.putInt("hueEnd", 60);
+            }
+            editor.commit();
+            return;
+        }
+        // 緑色弱かチェック
+        if(mResults[1] > 0) {
+            // 軽度かチェック
+            if(mResults[1] <= 1) {
+                editor.putBoolean("isColorValueTransfarFunction", true);
+                editor.putInt("redColor", 100);
+                editor.putInt("greenColor", 120);
+                editor.putInt("blueColor", 100);
+            }
+            else {
+                editor.putBoolean("isColorInfoFunction", true);
+                editor.putBoolean("isFlashingFunction", true);
+                editor.putInt("saturation", 20);
+                editor.putInt("hueStart", 120);
+                editor.putInt("hueEnd", 180);
+            }
+            editor.commit();
+            return;
+        }
+        // 青色弱かチェック
+        if(mResults[2] > 0) {
+            // 軽度かチェック
+            if(mResults[2] <= 1) {
+                editor.putBoolean("isColorValueTransfarFunction", true);
+                editor.putInt("redColor", 100);
+                editor.putInt("greenColor", 100);
+                editor.putInt("blueColor", 120);
+            }
+            else {
+                editor.putBoolean("isColorInfoFunction", true);
+                editor.putBoolean("isFlashingFunction", true);
+                editor.putInt("saturation", 20);
+                editor.putInt("hueStart", 240);
+                editor.putInt("hueEnd", 300);
+            }
+            editor.commit();
+            return;
+        }
     }
 
 }
