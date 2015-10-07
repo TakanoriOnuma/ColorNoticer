@@ -115,6 +115,12 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
     // 画像処理を設定する
     private void setConfig() {
         Editor editor = mPref.edit();
+
+        // 機能を初期化する
+        editor.putBoolean("isColorValueTransfarFunction", false);
+        editor.putBoolean("isColorInfoFunction", false);
+        editor.putBoolean("isFlashingFunction", false);
+
         // 赤色弱かチェック
         if(mResults[0] > 0) {
             // 軽度かチェック
