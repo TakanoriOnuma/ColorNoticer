@@ -53,14 +53,14 @@
                         android:layout_weight="1"
                         android:text="3" />
                     <CheckBox
-                        android:id="@+id/checkBox2"
+                        android:id="@+id/checkBox4"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="4" />
 
                     <CheckBox
-                        android:id="@+id/checkBox3"
+                        android:id="@+id/checkBox5"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
