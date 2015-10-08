@@ -53,6 +53,8 @@ public class ImageViewer extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         if(mBitmap != null) {
+            // 緊急処置
+            mViewRect.set(0, 0, getWidth(), getHeight());
             canvas.drawBitmap(mBitmap, mBitmapRect, mViewRect, null);
 
             if(mColorInfoDrawer != null) {

@@ -13,6 +13,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.ImageFormat;
@@ -102,21 +103,6 @@ public class MainActivity extends ActionBarActivity
         WindowManager.LayoutParams winParams = win.getAttributes();
         winParams.flags |= 0x80000000;
         win.setAttributes(winParams);
-
-        // 初期起動かチェック
-        if(mPref.getBoolean("InitState", true)) {
-            // ダイアログを表示する（ボタンの順番が変なので逆で登録している）
-            new AlertDialog.Builder(this)
-                .setMessage("色覚検査をしますか？")
-                .setNegativeButton("はい", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        onSectionAttached(1);   // 色覚検査アクティビティに飛ぶ
-                    }
-                })
-                .setPositiveButton("いいえ", null)
-                .show();
-        }
     }
 
     @Override
@@ -307,6 +293,26 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        // 初期起動かチェック
+        if(mPref.getBoolean("InitState", true)) {
+            // ダイアログを表示する（ボタンの順番が変なので逆で登録している）
+            new AlertDialog.Builder(this)
+                .setMessage("色覚検査をしますか？")
+                .setNegativeButton("はい", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onSectionAttached(1);   // 色覚検査アクティビティに飛ぶ
+                    }
+                })
+                .setPositiveButton("いいえ", null)
+                .show();
+
+            // 次から聞かないようにする
+            Editor editor = mPref.edit();
+            editor.putBoolean("InitState", false);
+            editor.commit();
+        }
+
         // カメラの初期化処理
         mCamera = Camera.open();
         if(mCamera != null) {
