@@ -101,10 +101,10 @@ public class MainActivity extends ActionBarActivity
         super.onActivityResult(requestCode, resultCode, intent);
 
         if(resultCode == RESULT_OK && requestCode == RESULT_COLORVISION_TEST && intent != null) {
+            String colorVisionResult = intent.getStringExtra("ColorVisionResult");
             // 結果の表示
             new AlertDialog.Builder(this)
-                    .setTitle("検査結果")
-                    .setMessage("結果内容")
+                    .setMessage("あなたの検査結果は、" + colorVisionResult)
                     .setPositiveButton("OK", null)
                     .show();
         }

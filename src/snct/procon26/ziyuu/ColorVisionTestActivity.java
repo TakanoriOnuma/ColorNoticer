@@ -2,6 +2,7 @@ package snct.procon26.ziyuu;
 
 import java.util.ArrayList;
 
+import snct.procon26.ziyuu.colorvision.ColorVisionResult;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -106,7 +107,8 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
         // 3問目を超えたら色覚検査を終了する
         if(mQuestionNumber >= 3) {
             Intent intent = getIntent();
-            setConfig();
+            ColorVisionResult result = setConfig();
+            intent.putExtra("ColorVisionResult", result.toString());
             setResult(RESULT_OK, intent);
             finish();
             return;
@@ -116,7 +118,8 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
     }
 
     // 画像処理を設定する
-    private void setConfig() {
+    private ColorVisionResult setConfig() {
+        ColorVisionResult result = new ColorVisionResult();
         Editor editor = mPref.edit();
 
         // 機能を初期化する
@@ -126,14 +129,17 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
 
         // 赤色弱かチェック
         if(mResults[0] > 0) {
+            result.setType(ColorVisionResult.TYPE_RED_WEAK);
             // 軽度かチェック
             if(mResults[0] <= 1) {
+                result.setLevel(ColorVisionResult.LEVEL_MILD);
                 editor.putBoolean("isColorValueTransfarFunction", true);
                 editor.putInt("redColor", 120);
                 editor.putInt("greenColor", 100);
                 editor.putInt("blueColor", 100);
             }
             else {
+                result.setLevel(ColorVisionResult.LEVEL_SEVERE);
                 editor.putBoolean("isColorInfoFunction", true);
                 editor.putBoolean("isFlashingFunction", true);
                 editor.putInt("saturation", 20);
@@ -141,18 +147,21 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
                 editor.putInt("hueEnd", 60);
             }
             editor.commit();
-            return;
+            return result;
         }
         // 緑色弱かチェック
         if(mResults[1] > 0) {
+            result.setType(ColorVisionResult.TYPE_GREEN_WEAK);
             // 軽度かチェック
             if(mResults[1] <= 1) {
+                result.setLevel(ColorVisionResult.LEVEL_MILD);
                 editor.putBoolean("isColorValueTransfarFunction", true);
                 editor.putInt("redColor", 100);
                 editor.putInt("greenColor", 120);
                 editor.putInt("blueColor", 100);
             }
             else {
+                result.setLevel(ColorVisionResult.LEVEL_SEVERE);
                 editor.putBoolean("isColorInfoFunction", true);
                 editor.putBoolean("isFlashingFunction", true);
                 editor.putInt("saturation", 20);
@@ -160,18 +169,21 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
                 editor.putInt("hueEnd", 180);
             }
             editor.commit();
-            return;
+            return result;
         }
         // 青色弱かチェック
         if(mResults[2] > 0) {
+            result.setType(ColorVisionResult.TYPE_BLUE_WEAK);
             // 軽度かチェック
             if(mResults[2] <= 1) {
+                result.setLevel(ColorVisionResult.LEVEL_MILD);
                 editor.putBoolean("isColorValueTransfarFunction", true);
                 editor.putInt("redColor", 100);
                 editor.putInt("greenColor", 100);
                 editor.putInt("blueColor", 120);
             }
             else {
+                result.setLevel(ColorVisionResult.LEVEL_SEVERE);
                 editor.putBoolean("isColorInfoFunction", true);
                 editor.putBoolean("isFlashingFunction", true);
                 editor.putInt("saturation", 20);
@@ -179,8 +191,11 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
                 editor.putInt("hueEnd", 300);
             }
             editor.commit();
-            return;
+            return result;
         }
+        // 一般色覚者だと設定してリターンする
+        result.setType(ColorVisionResult.TYPE_NONE);
+        result.setLevel(ColorVisionResult.LEVEL_NONE);
+        return result;
     }
-
 }
