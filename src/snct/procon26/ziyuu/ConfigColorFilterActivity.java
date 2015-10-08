@@ -22,6 +22,8 @@ import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -107,6 +109,12 @@ public class ConfigColorFilterActivity extends Activity
         saveButton.setOnClickListener(this);
 
         mOverLay = (ImageViewer)findViewById(R.id.OverLayView);
+
+        // MOVERIOのフルスクリーン設定
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        winParams.flags |= 0x80000000;
+        win.setAttributes(winParams);
     }
 
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
