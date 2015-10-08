@@ -9,6 +9,7 @@ import snct.procon26.ziyuu.colortransfar.ColorValueTransfar;
 import snct.procon26.ziyuu.imageviewer.ColorInfoDrawer;
 import snct.procon26.ziyuu.imageviewer.ImageViewer;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -38,6 +39,10 @@ import android.view.ViewGroup;
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
             SurfaceHolder.Callback, Camera.PreviewCallback {
+
+    private static final int RESULT_COLORVISION_TEST = 1000;
+    private static final int RESULT_COLORFILTER      = 1001;
+    private static final int RESULT_COLORINFO        = 1002;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -92,6 +97,20 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if(resultCode == RESULT_OK && requestCode == RESULT_COLORVISION_TEST && intent != null) {
+            // 結果の表示
+            new AlertDialog.Builder(this)
+                    .setTitle("検査結果")
+                    .setMessage("結果内容")
+                    .setPositiveButton("OK", null)
+                    .show();
+        }
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -109,15 +128,19 @@ public class MainActivity extends ActionBarActivity
 
         // 次のアクティビティをセットする
         Intent intent;
+        int requestCode;
         switch (number) {
         case 1:
             intent = new Intent(MainActivity.this, ColorVisionTestActivity.class);
+            requestCode = RESULT_COLORVISION_TEST;
             break;
         case 2:
             intent = new Intent(MainActivity.this, ConfigColorFilterActivity.class);
+            requestCode = RESULT_COLORFILTER;
             break;
         case 3:
             intent = new Intent(MainActivity.this, ConfigColorInfoActivity.class);
+            requestCode = RESULT_COLORINFO;
             break;
         default:
             return;
@@ -125,7 +148,7 @@ public class MainActivity extends ActionBarActivity
 
         // Viewを破棄して次のアクティビティに移る
         surfaceDestroyed(mSurfaceHolder);
-        startActivity(intent);
+        startActivityForResult(intent, requestCode);
     }
 
     public void restoreActionBar() {

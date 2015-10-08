@@ -3,6 +3,7 @@ package snct.procon26.ziyuu;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -104,7 +105,9 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
         mQuestionNumber += 1;
         // 3問目を超えたら色覚検査を終了する
         if(mQuestionNumber >= 3) {
+            Intent intent = getIntent();
             setConfig();
+            setResult(RESULT_OK, intent);
             finish();
             return;
         }
