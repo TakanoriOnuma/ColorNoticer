@@ -10,7 +10,8 @@ import snct.procon26.ziyuu.imageviewer.ColorInfoDrawer;
 import snct.procon26.ziyuu.imageviewer.ImageViewer;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;import android.content.Intent;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -106,7 +107,7 @@ public class MainActivity extends ActionBarActivity
         if(mPref.getBoolean("InitState", true)) {
             // ダイアログを表示する（ボタンの順番が変なので逆で登録している）
             new AlertDialog.Builder(this)
-                .setTitle("色覚検査をしますか？")
+                .setMessage("色覚検査をしますか？")
                 .setNegativeButton("はい", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
