@@ -9,6 +9,8 @@ import snct.procon26.ziyuu.colortransfar.ColorValueTransfar;
 import snct.procon26.ziyuu.imageviewer.ColorInfoDrawer;
 import snct.procon26.ziyuu.imageviewer.ImageViewer;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -96,6 +98,21 @@ public class MainActivity extends ActionBarActivity
         WindowManager.LayoutParams winParams = win.getAttributes();
         winParams.flags |= 0x80000000;
         win.setAttributes(winParams);
+
+        // 初期起動かチェック
+        if(mPref.getBoolean("InitState", true)) {
+            // ダイアログを表示する（ボタンの順番が変なので逆で登録している）
+            new AlertDialog.Builder(this)
+                .setTitle("色覚検査をしますか？")
+                .setNegativeButton("はい", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onSectionAttached(1);   // 色覚検査アクティビティに飛ぶ
+                    }
+                })
+                .setPositiveButton("いいえ", null)
+                .show();
+        }
     }
 
     @Override
