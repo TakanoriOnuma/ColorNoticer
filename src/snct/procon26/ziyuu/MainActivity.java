@@ -368,8 +368,8 @@ public class MainActivity extends ActionBarActivity
                 }
                 if(mPref.getBoolean("isFlashingFunction", false)) {
                     ColorFilter colorFilter = new ColorFilter();
-                    colorFilter.setHueStart(mPref.getInt("hueStart", 0) - 60);
-                    colorFilter.setHueEnd(mPref.getInt("hueEnd", 0) - 60);
+                    colorFilter.setHueStart(mPref.getInt("hueStart", 0) - 30);
+                    colorFilter.setHueEnd(mPref.getInt("hueEnd", 0) - 30);
                     colorFilter.setSaturation(mPref.getInt("saturation", 50));
                     mColorTransfar.setColorFilter(colorFilter);
                 }

@@ -204,8 +204,8 @@ public class ConfigColorInfoActivity extends Activity
         if(mCamera != null){
             TextView colorProperties = (TextView)findViewById(R.id.ColorProperties);
             int saturation = mSaturationBar.getProgress() & 0xff;
-            int hueStart   = mHueStartBar.getProgress() - 60;
-            int hueEnd     = mHueEndBar.getProgress()   - 60;
+            int hueStart   = mHueStartBar.getProgress() - 30;
+            int hueEnd     = mHueEndBar.getProgress()   - 30;
             colorProperties.setText(String.format("%d, %d, %d", saturation, hueStart, hueEnd));
 
             mColorFilter.setSaturation(saturation);
