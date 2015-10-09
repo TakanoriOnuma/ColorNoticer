@@ -3,19 +3,26 @@ package snct.procon26.ziyuu;
 import java.io.IOException;
 import java.util.List;
 
+import snct.procon26.ziyuu.colortransfar.ColorFilter;
 import snct.procon26.ziyuu.colortransfar.ColorTransfar;
+import snct.procon26.ziyuu.colortransfar.ColorValueTransfar;
+import snct.procon26.ziyuu.imageviewer.ColorInfoDrawer;
 import snct.procon26.ziyuu.imageviewer.ImageViewer;
-
-import jp.co.sendai.national.college.of.technology.R;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.ImageFormat;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -29,11 +36,16 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
             SurfaceHolder.Callback, Camera.PreviewCallback {
+
+    private static final int RESULT_COLORVISION_TEST = 1000;
+    private static final int RESULT_COLORFILTER      = 1001;
+    private static final int RESULT_COLORINFO        = 1002;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -45,7 +57,7 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-    private ColorTransfar mColorTransfar;
+    private ColorTransfar mColorTransfar = new ColorTransfar();
 
     private SurfaceView mSvFacePreview;
     private SurfaceHolder mSurfaceHolder;
@@ -57,6 +69,9 @@ public class MainActivity extends ActionBarActivity
     private int[]  mImageData;
     private Bitmap mBitmap;
     private ImageViewer mOverLay;
+    private ColorInfoDrawer mColorInfoDrawer = null;
+
+    private SharedPreferences mPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +93,44 @@ public class MainActivity extends ActionBarActivity
         mSurfaceHolder.addCallback(this);
 
         mOverLay = (ImageViewer)findViewById(R.id.OverLayView);
+
+        // リファレンスマネージャの取得
+        mPref = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // MOVERIOのフルスクリーン設定
+        Window win = getWindow();
+        WindowManager.LayoutParams winParams = win.getAttributes();
+        winParams.flags |= 0x80000000;
+        win.setAttributes(winParams);
+
+        // 初期起動かチェック
+        if(mPref.getBoolean("InitState", true)) {
+            // ダイアログを表示する（ボタンの順番が変なので逆で登録している）
+            new AlertDialog.Builder(this)
+                .setMessage("色覚検査をしますか？")
+                .setNegativeButton("はい", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        onSectionAttached(1);   // 色覚検査アクティビティに飛ぶ
+                    }
+                })
+                .setPositiveButton("いいえ", null)
+                .show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if(resultCode == RESULT_OK && requestCode == RESULT_COLORVISION_TEST && intent != null) {
+            String colorVisionResult = intent.getStringExtra("ColorVisionResult");
+            // 結果の表示
+            new AlertDialog.Builder(this)
+                    .setMessage("あなたの検査結果は、" + colorVisionResult)
+                    .setPositiveButton("OK", null)
+                    .show();
+        }
     }
 
     @Override
@@ -90,27 +143,29 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void onSectionAttached(int number) {
+        // 次のアクティビティをセットする
         Intent intent;
+        int requestCode;
         switch (number) {
         case 1:
-            mTitle = getString(R.string.title_section1);
+            intent = new Intent(MainActivity.this, ColorVisionTestActivity.class);
+            requestCode = RESULT_COLORVISION_TEST;
             break;
         case 2:
-            // 応急処置の切り替え（実際は別なところからやると思う）
-            mTitle = getString(R.string.title_section2);
-            surfaceDestroyed(mSurfaceHolder);
-
             intent = new Intent(MainActivity.this, ConfigColorFilterActivity.class);
-            startActivity(intent);
+            requestCode = RESULT_COLORFILTER;
             break;
         case 3:
-            mTitle = getString(R.string.title_section3);
-            surfaceDestroyed(mSurfaceHolder);
-
             intent = new Intent(MainActivity.this, ConfigColorInfoActivity.class);
-            startActivity(intent);
+            requestCode = RESULT_COLORINFO;
             break;
+        default:
+            return;
         }
+
+        // Viewを破棄して次のアクティビティに移る
+        surfaceDestroyed(mSurfaceHolder);
+        startActivityForResult(intent, requestCode);
     }
 
     public void restoreActionBar() {
@@ -138,10 +193,12 @@ public class MainActivity extends ActionBarActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
+        // セッティングの未使用
+//        int id = item.getItemId();
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -174,8 +231,6 @@ public class MainActivity extends ActionBarActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
 
@@ -230,6 +285,15 @@ public class MainActivity extends ActionBarActivity
             int[] frame = mImageData;
 
             mColorTransfar.decodeYUV420SP(frame, data, mPreviewSize.width, mPreviewSize.height);
+
+            if(mColorInfoDrawer != null) {
+                // 色情報の取得
+                Point pos = mOverLay.getCursorPoint();
+                Rect  viewRect = mOverLay.getViewRect();
+                int color = ColorTransfar.getColor(data, mPreviewSize.width, mPreviewSize.height,
+                        mPreviewSize.width * pos.x / viewRect.right, mPreviewSize.height * pos.y / viewRect.bottom);
+                mColorInfoDrawer.setColorInfo(color);
+            }
 
             // Bitmapに描画して、OverLayに再描画を促す
             mBitmap.setPixels(frame, 0, mPreviewSize.width,
@@ -291,8 +355,35 @@ public class MainActivity extends ActionBarActivity
                         0, 0, mPreviewSize.width, mPreviewSize.height);
                 mOverLay.setBitmap(mBitmap);
 
-                // 色変換クラスの作成
-                mColorTransfar = new ColorTransfar();
+                // 各種設定の読み込み
+                if(mPref.getBoolean("isColorValueTransfarFunction", false)) {
+                    ColorValueTransfar colorValueTransfar = new ColorValueTransfar();
+                    colorValueTransfar.setRedRate(mPref.getInt("redColor", 50));
+                    colorValueTransfar.setGreenRate(mPref.getInt("greenColor", 50));
+                    colorValueTransfar.setBlueRate(mPref.getInt("blueColor", 50));
+                    mColorTransfar.setColorValueTransfar(colorValueTransfar);
+                }
+                else {
+                    mColorTransfar.setColorValueTransfar(null);
+                }
+                if(mPref.getBoolean("isFlashingFunction", false)) {
+                    ColorFilter colorFilter = new ColorFilter();
+                    colorFilter.setHueStart(mPref.getInt("hueStart", 0) - 60);
+                    colorFilter.setHueEnd(mPref.getInt("hueEnd", 0) - 60);
+                    colorFilter.setSaturation(mPref.getInt("saturation", 50));
+                    mColorTransfar.setColorFilter(colorFilter);
+                }
+                else {
+                    mColorTransfar.setColorFilter(null);
+
+                }
+                if(mPref.getBoolean("isColorInfoFunction", false)) {
+                    mColorInfoDrawer = new ColorInfoDrawer();
+                }
+                else {
+                    mColorInfoDrawer = null;
+                }
+                mOverLay.setColorInfoDrawer(mColorInfoDrawer);
 
                 // フレームバッファを追加
                 mCamera.setPreviewCallbackWithBuffer(this);
