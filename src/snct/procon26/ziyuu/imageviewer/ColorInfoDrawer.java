@@ -136,6 +136,20 @@ public class ColorInfoDrawer {
     }
 
     public String getColorName(int[] hsv) {
+        // SとVは0～100
+        // 彩度が低いなら
+        if(hsv[1] < 15) {
+            // 明るさで判断する
+            if(hsv[2] < 20) {
+                return "黒色";
+            }
+            else if(hsv[2] < 70) {
+                return "灰色";
+            }
+            else {
+                return "白色";
+            }
+        }
         if(hsv[0] < 30) {
             return "赤色";
         }
