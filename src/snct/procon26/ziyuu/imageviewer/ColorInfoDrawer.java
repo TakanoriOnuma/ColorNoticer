@@ -121,6 +121,14 @@ public class ColorInfoDrawer {
         drawArrow(canvas, pivot, new Point(pivot.x + halfWidth, pivot.y + halfHeight), arrowPaint);
         arrowPaint.setColor(Color.BLUE);
         drawArrow(canvas, pivot, new Point(pivot.x - halfWidth, pivot.y + halfHeight), arrowPaint);
+
+        FontMetrics fontMetrics = mTextPaint.getFontMetrics();
+        float textHeight = -fontMetrics.top + fontMetrics.bottom;
+        float textWidth = mTextPaint.measureText("赤");
+        // 文字の描画
+        canvas.drawText("赤", pivot.x + 2, pivot.y - size + textHeight, mTextPaint);
+        canvas.drawText("緑", pivot.x + halfWidth - textWidth, pivot.y + halfHeight - textHeight / 2, mTextPaint);
+        canvas.drawText("青", pivot.x - halfWidth, pivot.y + halfHeight - textHeight / 2, mTextPaint);
     }
 
     private void drawArrow(Canvas canvas, Point startPt, Point endPt, Paint paint) {
