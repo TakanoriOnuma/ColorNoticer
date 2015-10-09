@@ -50,7 +50,7 @@ public class ColorFilter implements IColorFilter {
         }
 
         int min = MyFunction.min(r, g, b);
-        int contrast = 255 * (max - min) / max;
+        int contrast = 100 * (max - min) / max;
 
         // 差が小さいなら彩度Sも小さいので計算しない
         if(contrast <= mSaturation) {
