@@ -27,7 +27,6 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.Switch;
-import android.widget.TextView;
 
 public class ConfigColorFilterActivity extends Activity
         implements SurfaceHolder.Callback, Camera.PreviewCallback, View.OnClickListener {
@@ -93,9 +92,9 @@ public class ConfigColorFilterActivity extends Activity
         mBlueColorBar.setEnabled(false);
 
         mPref = PreferenceManager.getDefaultSharedPreferences(this);
-        int red   = mPref.getInt("redColor", mSeekBarOffset);
-        int green = mPref.getInt("greenColor", mSeekBarOffset);
-        int blue  = mPref.getInt("blueColor", mSeekBarOffset);
+        int red   = mPref.getInt("redColor", mSeekBarOffset + 50);
+        int green = mPref.getInt("greenColor", mSeekBarOffset + 50);
+        int blue  = mPref.getInt("blueColor", mSeekBarOffset + 50);
 
         mRedColorBar.setProgress(red - mSeekBarOffset);
         mGreenColorBar.setProgress(green - mSeekBarOffset);
@@ -149,11 +148,9 @@ public class ConfigColorFilterActivity extends Activity
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
         if(mCamera != null) {
-            TextView colorProperties = (TextView)findViewById(R.id.ColorProperties);
             int red   = mRedColorBar.getProgress()   + mSeekBarOffset;
             int green = mGreenColorBar.getProgress() + mSeekBarOffset;
             int blue  = mBlueColorBar.getProgress()  + mSeekBarOffset;
-            colorProperties.setText(String.format("%d, %d, %d", red, green, blue));
 
             mColorValueTransfar.setRedRate(red);
             mColorValueTransfar.setGreenRate(green);
