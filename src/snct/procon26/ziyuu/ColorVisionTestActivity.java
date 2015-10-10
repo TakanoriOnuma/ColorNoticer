@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -69,12 +67,6 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
 
         Button button = (Button)findViewById(R.id.nextButton);
         button.setOnClickListener(this);
-
-        // MOVERIOのフルスクリーン設定
-        Window win = getWindow();
-        WindowManager.LayoutParams winParams = win.getAttributes();
-        winParams.flags |= 0x80000000;
-        win.setAttributes(winParams);
     }
 
     @Override
@@ -98,7 +90,7 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
                 // 正解なら
                 if(idx != -1) {
                     answer.remove(idx);
-}
+                }
                 // 不正解なら
                 else {
                     mResults[mQuestionNumber] += 1;
