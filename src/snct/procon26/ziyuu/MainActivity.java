@@ -116,6 +116,9 @@ public class MainActivity extends ActionBarActivity
                 })
                 .setPositiveButton("いいえ", null)
                 .show();
+
+            // 次から聞かれないようにする
+            mPref.edit().putBoolean("InitState", false).commit();
         }
     }
 

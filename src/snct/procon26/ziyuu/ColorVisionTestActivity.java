@@ -60,6 +60,8 @@ public class ColorVisionTestActivity extends Activity implements View.OnClickLis
 
         mQuestionImageIds[2] = R.drawable.bluevision_test;
         mQuestionAnswers[2]  = new ArrayList<Integer>();
+        mQuestionAnswers[2].add(3);
+        mQuestionAnswers[2].add(2);
 
         // 問題のセット
         mImageView = (ImageView)findViewById(R.id.imageView);
