@@ -126,7 +126,8 @@ public class ConfigColorFilterActivity extends Activity
         Size optimalSize = null;
         double minDiff = Double.MAX_VALUE;
 
-        int targetHeight = h;
+        // 半分のサイズにする
+        int targetHeight = h / 2;
 
         // Try to find an size match aspect ratio and size
         for (Size size : sizes) {

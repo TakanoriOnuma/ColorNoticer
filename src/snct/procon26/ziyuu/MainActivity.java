@@ -251,7 +251,8 @@ public class MainActivity extends ActionBarActivity
         Size optimalSize = null;
         double minDiff = Double.MAX_VALUE;
 
-        int targetHeight = h;
+        // 半分のサイズにする
+        int targetHeight = h / 2;
 
         // Try to find an size match aspect ratio and size
         for (Size size : sizes) {
@@ -274,6 +275,11 @@ public class MainActivity extends ActionBarActivity
                 }
             }
         }
+        for(Size size : sizes) {
+            Log.d("debug", size.width + ", " + size.height);
+        }
+
+        Log.d("debug", optimalSize.width + ", " + optimalSize.height);
         return optimalSize;
     }
 
